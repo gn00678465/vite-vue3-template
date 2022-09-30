@@ -1,22 +1,18 @@
 /// <reference types="vitest" />
 
-import { defineConfig } from 'vite';
+import { defineConfig, mergeConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import jsx from '@vitejs/plugin-vue-jsx';
-import path from 'path';
+import { vitestConfig, getRootPath, getSrcPath } from './build/index';
 
-export default defineConfig({
+const viteConfig = defineConfig({
   plugins: [vue(), jsx()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  },
-  test: {
-    globals: true,
-    environment: 'happy-dom',
-    transformMode: {
-      web: [/\.[jt]sx$/]
+      '~': getRootPath(),
+      '@': getSrcPath()
     }
   }
 });
+
+export default mergeConfig(viteConfig, vitestConfig);
