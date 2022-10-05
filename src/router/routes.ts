@@ -1,12 +1,22 @@
 import { RouteRecordRaw } from 'vue-router';
 import HelloWorld from '../components/HelloWorld.vue';
 import About from '../components/About';
-import LoginPage from '../pages/System/Login';
 
 const routes: RouteRecordRaw[] = [
   { path: '/', component: HelloWorld },
   { path: '/about', component: About },
-  { path: '/login', component: LoginPage }
+  {
+    name: 'LoginPage',
+    path: '/login',
+    component: () => import('../pages/System/Login'),
+    props: (route) => {
+      const moduleType =
+        (route.params.module as EnumType.LoginModuleKey) || 'pwd-login';
+      return {
+        module: moduleType
+      };
+    }
+  }
 ];
 
 export default routes;

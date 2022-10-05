@@ -1,9 +1,10 @@
-import { defineComponent, ref, computed, Transition } from 'vue';
-import type { Component } from 'vue';
+import { defineComponent, computed, Transition } from 'vue';
+import type { Component, PropType } from 'vue';
 import { EnumLoginModules } from '@/enum';
 import { useAppInfo } from '@/composables';
 import { NCard, NGradientText } from 'naive-ui';
 import { PwdLogin } from './components';
+import SystemLogo from '@/components/common/SystemLogo.vue';
 
 interface LoginModule {
   key: EnumType.LoginModuleKey;
@@ -13,6 +14,12 @@ interface LoginModule {
 
 export default defineComponent({
   name: 'LoginPage',
+  props: {
+    module: {
+      type: String as PropType<EnumType.LoginModuleKey>,
+      required: true
+    }
+  },
   setup(props, ctx) {
     const { title } = useAppInfo();
 
@@ -40,7 +47,9 @@ export default defineComponent({
         >
           <div class="w-[300px] sm:w-[360px]">
             <header class="flex items-center justify-between">
-              <div>Logo</div>
+              <div class="w-[70px] h-[70px] overflow-hidden">
+                <SystemLogo class="text-[70px]" />
+              </div>
               <NGradientText type="primary" size={28}>
                 {title}
               </NGradientText>
