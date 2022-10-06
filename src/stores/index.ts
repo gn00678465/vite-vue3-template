@@ -6,3 +6,5 @@ export function setupStore(app: App): void {
 
   app.use(pinia);
 }
+
+export * from './modules';

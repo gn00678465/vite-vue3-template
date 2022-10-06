@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { NConfigProvider, zhTW, dateZhTW } from 'naive-ui';
+import { useThemeStore } from '@/stores';
+
+const theme = useThemeStore();
 </script>
 
 <template>
@@ -8,6 +11,7 @@ import { NConfigProvider, zhTW, dateZhTW } from 'naive-ui';
     :locale="zhTW"
     :data-locale="dateZhTW"
     :preflight-style-disable="true"
+    :theme="theme.naiveTheme"
   >
     <RouterView />
   </n-config-provider>

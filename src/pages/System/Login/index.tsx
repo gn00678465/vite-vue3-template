@@ -2,7 +2,9 @@ import { defineComponent, computed, Transition } from 'vue';
 import type { Component, PropType } from 'vue';
 import { EnumLoginModules } from '@/enum';
 import { useAppInfo } from '@/composables';
-import { NCard, NGradientText } from 'naive-ui';
+import { useThemeStore } from '@/stores';
+import { NCard, NGradientText, NSwitch, NIcon } from 'naive-ui';
+import { SunnySharp, MoonSharp } from '@vicons/ionicons5';
 import { PwdLogin } from './components';
 import SystemLogo from '@/components/common/SystemLogo.vue';
 
@@ -23,6 +25,8 @@ export default defineComponent({
   setup(props, ctx) {
     const { title } = useAppInfo();
 
+    const theme = useThemeStore();
+
     const modules: LoginModule[] = [
       {
         key: 'pwd-login',
@@ -40,6 +44,16 @@ export default defineComponent({
 
     return () => (
       <div class="relative, flex items-center justify-center w-full h-full">
+        <NSwitch
+          value={theme.darkMode}
+          class="absolute top-[24px] left-[48px]"
+          on-update:value={theme.setDarkMode}
+        >
+          {{
+            'unchecked-icon': () => <NIcon component={SunnySharp} />,
+            'checked-icon': () => <NIcon component={MoonSharp} />
+          }}
+        </NSwitch>
         <NCard
           class="w-auto rounded-[20px] shadow-sm"
           bordered={false}
