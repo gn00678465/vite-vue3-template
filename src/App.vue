@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { NConfigProvider, zhTW, dateZhTW } from 'naive-ui';
+import NaiveUIProvider from './components/common/NaiveUIProvider.vue';
 import { useThemeStore } from '@/stores';
 
 const theme = useThemeStore();
@@ -13,7 +14,9 @@ const theme = useThemeStore();
     :preflight-style-disable="true"
     :theme="theme.naiveTheme"
   >
-    <RouterView />
+    <NaiveUIProvider>
+      <RouterView />
+    </NaiveUIProvider>
   </n-config-provider>
 </template>
 

@@ -4,12 +4,17 @@ import {
   createWebHashHistory,
   Router
 } from 'vue-router';
-import routes from './routes';
+import type { App } from 'vue';
+// import routes from './routes';
+import { constantRoutes } from './routes';
 
 const router: Router = createRouter({
   scrollBehavior: () => ({ top: 0, left: 0 }),
   history: createWebHashHistory(),
-  routes
+  routes: constantRoutes
 });
 
-export default router;
+export async function setupRouter(app: App) {
+  app.use(router);
+  await router.isReady();
+}

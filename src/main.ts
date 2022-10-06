@@ -1,14 +1,18 @@
 import { createApp } from 'vue';
 
-import router from './router/index';
+import { setupRouter } from './router/index';
 import { setupStore } from './stores';
 import './style/index.css';
 // import './style.css';
 import App from './App.vue';
 
-const app = createApp(App);
+async function setupApp() {
+  const app = createApp(App);
+  setupStore(app);
 
-setupStore(app);
+  await setupRouter(app);
 
-app.use(router);
-app.mount('#app');
+  app.mount('#app');
+}
+
+setupApp();
