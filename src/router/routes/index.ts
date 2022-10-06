@@ -1,15 +1,13 @@
-import { RouteRecordRaw } from 'vue-router';
-
-export const ROOT_ROUTER = {
+export const ROOT_ROUTER: AuthRoute.Route = {
   name: 'root',
   path: '/',
-  redirect: '/login'
+  redirect: import.meta.env.VITE_BASE_ROUTE_PATH
 };
 
-export const constantRoutes: RouteRecordRaw[] = [
+export const constantRoutes: AuthRoute.Route[] = [
   ROOT_ROUTER,
   {
-    name: 'LoginPage',
+    name: 'login',
     path: '/login',
     component: () => import('../../pages/System/Login'),
     props: (route) => {
