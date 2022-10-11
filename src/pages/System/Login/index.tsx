@@ -3,8 +3,8 @@ import type { Component, PropType } from 'vue';
 import { EnumLoginModules } from '@/enum';
 import { useAppInfo } from '@/composables';
 import { useThemeStore } from '@/stores';
-import { NCard, NGradientText, NSwitch, NIcon } from 'naive-ui';
-import { SunnySharp, MoonSharp } from '@vicons/ionicons5';
+import { NCard, NGradientText, NSwitch } from 'naive-ui';
+import { Icon } from '@iconify/vue';
 import { PwdLogin } from './components';
 import SystemLogo from '@/components/common/SystemLogo.vue';
 
@@ -50,8 +50,8 @@ export default defineComponent({
           on-update:value={theme.setDarkMode}
         >
           {{
-            'unchecked-icon': () => <NIcon component={SunnySharp} />,
-            'checked-icon': () => <NIcon component={MoonSharp} />
+            'unchecked-icon': () => <Icon icon="mdi:white-balance-sunny" />,
+            'checked-icon': () => <Icon icon="mdi:moon-waning-crescent" />
           }}
         </NSwitch>
         <NCard

@@ -7,16 +7,16 @@ const application: AuthRoute.Route = {
   redirect: '/application/license',
   meta: {
     title: '申請表單',
-    icon: 'AppsSharp'
+    icon: 'fluent:form-new-20-regular'
   },
   children: [
     {
       name: 'application_license',
-      path: 'license',
+      path: '/application/license',
       component: () => import('@/pages/application/license'),
       meta: {
         title: '授權申請',
-        icon: 'TrailSignSharp'
+        icon: 'clarity:license-line',
       }
     }
   ]
