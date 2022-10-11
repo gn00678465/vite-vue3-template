@@ -1,7 +1,14 @@
 declare namespace AuthRoute {
   type RouteSplitMark = '_';
 
-  type RouteKey = 'root' | 'login' | 'application' | 'application_license';
+  type RouteKey =
+    | 'root'
+    | 'login'
+    | 'no-permission'
+    | 'service-error'
+    | 'not-found'
+    | 'application'
+    | 'application_license';
 
   type RouteModule = Record<string, { default: AuthRoute.Route }>;
 
