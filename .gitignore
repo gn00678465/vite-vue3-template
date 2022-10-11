@@ -12,7 +12,7 @@ coverage
 dist
 dist-ssr
 *.local
-components.d.ts
+/src/types/components.d.ts
 
 # Editor directories and files
 .vscode/*

@@ -14,7 +14,13 @@ export default function (srcPath: string) {
       }
     }),
     Components({
-      dts: true,
+      dts: 'src/types/components.d.ts',
+      types: [
+        {
+          from: 'vue-router',
+          names: ['RouterLink', 'RouterView']
+        }
+      ],
       resolvers: [
         IconsResolver({
           prefix: 'icon',
