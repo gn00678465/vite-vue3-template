@@ -1,5 +1,5 @@
 import vitestConfig from './plugins/vitest.config';
-import unplugin from './plugins/unplugin';
+import plugins from './plugins';
 
 export * from './utils/index';
-export { vitestConfig, unplugin };
+export { vitestConfig, plugins };
