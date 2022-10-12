@@ -15,6 +15,7 @@
     "cy:run": "npx cypress run"
   },
   "dependencies": {
+    "@vueuse/core": "^9.3.0",
     "pinia": "^2.0.22",
     "vue": "^3.2.37",
     "vue-router": "^4.1.5"
@@ -42,6 +43,7 @@
     "typescript": "^4.6.4",
     "unplugin-icons": "^0.14.11",
     "unplugin-vue-components": "^0.22.7",
+    "unplugin-vue-macros": "^0.12.0",
     "vfonts": "^0.0.3",
     "vite": "^3.1.0",
     "vitest": "^0.23.4",
