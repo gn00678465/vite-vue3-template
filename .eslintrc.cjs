@@ -20,5 +20,5 @@ module.exports = {
   },
   plugins: ['vue', '@typescript-eslint'],
   rules: {},
-  globals: { defineOptions: 'writable' }
+  globals: { defineOptions: 'writable', defineRender: 'writable' }
 };
