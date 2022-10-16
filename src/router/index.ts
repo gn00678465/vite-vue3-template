@@ -7,17 +7,24 @@ import {
 import type { App } from 'vue';
 // import routes from './routes';
 import { constantRoutes } from './routes';
-import { routes } from './modules';
+import { createRouterGuard } from './guard';
+import { transformToVueRoutes } from '../utils/router/helps';
 
-const router: Router = createRouter({
+export const router: Router = createRouter({
   scrollBehavior: () => ({ top: 0, left: 0 }),
   history: createWebHashHistory(import.meta.env.VITE_BASE_URL),
-  routes: [...constantRoutes, ...routes]
+  routes: transformToVueRoutes(constantRoutes)
 });
 
 export async function setupRouter(app: App) {
+  createRouterGuard(router);
   app.use(router);
   await router.isReady();
 }
 
+export function routeName(name: AuthRoute.RouteKey) {
+  return name;
+}
+
+export * from './routes';
 export * from './modules';

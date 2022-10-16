@@ -1,4 +1,4 @@
-import BasicLayout from './BasicLayout';
+import BasicLayout from './BasicLayout/index.vue';
 import GlobalContent from './GlobalContent';
 import GlobalHeader from './GlobalHeader';
 import GlobalSider from './GlobalSider';

@@ -1,21 +1,26 @@
-import { defineComponent, Transition, computed } from 'vue';
-import type { ComputedRef } from 'vue';
+import { defineComponent, Transition, computed, h } from 'vue';
+import type { ComputedRef, Component } from 'vue';
+import type { RouteLocationNormalized, RouteComponent } from 'vue-router';
 
 export default defineComponent({
   name: 'GlobalContent',
   setup(props) {
     return () => (
-      <div class="h-full">
-        <router-view>
-          {{
-            default: ({ Component, route }) => (
-              <Transition mode="out-in" appear>
-                <Component key={route.fullName}></Component>
-              </Transition>
-            )
-          }}
-        </router-view>
-      </div>
+      <router-view>
+        {{
+          default: ({
+            Component,
+            route
+          }: {
+            Component: RouteComponent;
+            route: RouteLocationNormalized;
+          }) => (
+            <Transition name="fade-slide" mode="out-in" appear>
+              <Component key={route.fullPath} />
+            </Transition>
+          )
+        }}
+      </router-view>
     );
   }
 });

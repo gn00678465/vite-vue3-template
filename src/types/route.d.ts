@@ -7,6 +7,7 @@ declare namespace AuthRoute {
     | 'no-permission'
     | 'service-error'
     | 'not-found'
+    | 'not-found-page'
     | 'application'
     | 'application_license';
 
@@ -15,14 +16,19 @@ declare namespace AuthRoute {
   type RouteMeta = {
     title: string;
     icon?: string;
+    /**需要登入權限 */
+    requiresAuth?: boolean;
+    hide?: boolean;
+    /**外部連結 */
+    href?: string;
   };
 
   interface Route {
     name: RouteKey;
     path: string;
+    component?: RouteComponent;
     redirect?: string;
-    component?: any;
-    meta?: RouteMeta;
+    meta: RouteMeta;
     children?: Route[];
     props?:
       | boolean

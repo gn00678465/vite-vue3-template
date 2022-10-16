@@ -1,8 +1,9 @@
 import { defineComponent } from 'vue';
+import ExceptionBase from '@/components/common/ExceptionBase.vue';
 
 export default defineComponent({
   name: 'NoPermission',
   setup() {
-    return () => <div>403</div>;
+    return () => <ExceptionBase type={403} />;
   }
 });
