@@ -1,16 +1,17 @@
 /// <reference types="vitest" />
 
-import { defineConfig, mergeConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { vitestConfig, getRootPath, getSrcPath, plugins } from './build/index';
 
-const viteConfig = defineConfig({
-  plugins: plugins(getSrcPath()),
-  resolve: {
-    alias: {
-      '~': getRootPath(),
-      '@': getSrcPath()
+export default defineConfig((configEnv) => {
+  const viteEnv = loadEnv(configEnv.mode, process.cwd());
+  return {
+    plugins: plugins(viteEnv, getSrcPath()),
+    resolve: {
+      alias: {
+        '~': getRootPath(),
+        '@': getSrcPath()
+      }
     }
-  }
+  };
 });
-
-export default mergeConfig(viteConfig, vitestConfig);

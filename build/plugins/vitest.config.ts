@@ -1,7 +1,5 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
-
-export default defineConfig({
+export default {
   test: {
     globals: true,
     environment: 'happy-dom',
@@ -9,4 +7,4 @@ export default defineConfig({
       web: [/\.[jt]sx$/]
     }
   }
-});
+};
