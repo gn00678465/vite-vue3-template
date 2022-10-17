@@ -1,4 +1,5 @@
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import type { Ref } from 'vue';
 import {
   BasicLayout,
   GlobalContent,
@@ -11,16 +12,20 @@ export default defineComponent({
   name: 'AdminLayout',
   setup() {
     const app = useAppStore();
+
+    const collapsedWidth: Ref<number> = ref(64);
     return () => (
       <BasicLayout
-        collapsed-width={64}
+        collapsed-width={collapsedWidth.value}
         width={240}
         collapsed={app.menuCollapse}
         showTab={false}
         showFooter={false}
       >
         {{
-          sider: () => <GlobalSider></GlobalSider>,
+          sider: () => (
+            <GlobalSider collapsedWidth={collapsedWidth.value}></GlobalSider>
+          ),
           header: () => <GlobalHeader></GlobalHeader>,
           content: () => <GlobalContent></GlobalContent>,
           tab: () => <div class="px-3 py-2">tab</div>,

@@ -6,7 +6,13 @@ import { useRouterPush } from '@/composables';
 
 export default defineComponent({
   name: 'VerticalMenu',
-  setup() {
+  props: {
+    collapsedWidth: {
+      type: Number,
+      default: 48
+    }
+  },
+  setup(props) {
     const route = useRoute();
     const routeStore = useRouteStore();
     const { routerPush } = useRouterPush();
@@ -28,6 +34,7 @@ export default defineComponent({
           value={activeKey.value}
           options={menus.value}
           collapsed-icon-size={22}
+          collapsed-width={props.collapsedWidth}
           indent={18}
           on-update:value={handleRouterPush}
           on-update:expanded-keys={handleExpandedKeys}

@@ -17,7 +17,7 @@ export function transformMenuItem(config: IConfig) {
     Object.assign(item, { children });
   }
   if (icon) {
-    Object.assign(item, { icon: useRenderIcon({ icon, size: '16' }) });
+    Object.assign(item, { icon: useRenderIcon({ icon }) });
   }
   return item;
 }

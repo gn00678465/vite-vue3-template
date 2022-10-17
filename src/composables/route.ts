@@ -16,7 +16,7 @@ export function useRouterPush(inSetup = true) {
   }
 
   function goBack() {
-    router.back();
+    router.go(-1);
   }
 
   function goHome(newTab = false) {
