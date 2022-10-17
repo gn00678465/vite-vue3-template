@@ -1,16 +1,13 @@
-import { defineComponent, inject } from 'vue';
+import { defineComponent } from 'vue';
+import { ComputedRef } from 'vue';
 import { NCard, NScrollbar } from 'naive-ui';
 import { useLayoutStore } from '@/stores';
-
-interface IInject {
-  value: number;
-}
 
 export default defineComponent({
   name: 'ApplicationLicense',
   setup() {
-    const { provideContentHeightKey } = useLayoutStore();
-    const contentHeight = inject<IInject>(provideContentHeightKey, null);
+    const { useContentInject } = useLayoutStore();
+    const contentHeight = useContentInject() as ComputedRef<number>;
     return () => (
       <NCard size="small">
         <NScrollbar

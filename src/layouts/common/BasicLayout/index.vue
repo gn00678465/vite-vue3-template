@@ -6,6 +6,7 @@ export default {
 
 <script setup lang="ts">
 import { provide, ref, useSlots, useAttrs, computed } from 'vue';
+import { ComputedRef } from 'vue';
 import { useElementSize, useWindowSize } from '@vueuse/core';
 import type { MaybeComputedElementRef } from '@vueuse/core';
 import { useLayoutStore } from '@/stores';
@@ -53,7 +54,7 @@ const emits = defineEmits<IEmites>();
 const slots = useSlots();
 const attrs = useAttrs();
 
-const { provideContentHeightKey } = useLayoutStore();
+const { useContentProvide } = useLayoutStore();
 
 // dom operator
 const headerRef: MaybeComputedElementRef = ref(null);
@@ -82,7 +83,7 @@ const contentHeight = computed<number>(() => {
 });
 
 provide('inverted', props.inverted);
-provide(provideContentHeightKey, contentHeight);
+useContentProvide(contentHeight as ComputedRef<number>);
 </script>
 
 <template>
