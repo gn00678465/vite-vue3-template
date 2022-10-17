@@ -4,7 +4,7 @@ const errors: AuthRoute.Route = {
   name: 'error',
   path: '/error',
   component: getLayoutComponent('basic'),
-  redirectPath: '/error/403',
+  redirect: '/error/403',
   meta: {
     title: '錯誤頁面',
     icon: 'fluent:error-circle-12-regular'
@@ -16,8 +16,7 @@ const errors: AuthRoute.Route = {
       component: () => import('@/pages/system/NoPermission'),
       meta: {
         title: '無權限',
-        icon: 'fluent:shield-error-16-regular',
-        requiresAuth: true
+        icon: 'fluent:shield-error-16-regular'
       }
     },
     {
@@ -26,8 +25,7 @@ const errors: AuthRoute.Route = {
       component: () => import('@/pages/system/NotFound'),
       meta: {
         title: '無此頁面',
-        icon: 'fluent:calendar-error-20-regular',
-        requiresAuth: true
+        icon: 'fluent:calendar-error-20-regular'
       }
     },
     {
@@ -36,8 +34,7 @@ const errors: AuthRoute.Route = {
       component: () => import('@/pages/system/ServiceError'),
       meta: {
         title: '伺服器錯誤',
-        icon: 'fluent:error-circle-settings-16-regular',
-        requiresAuth: true
+        icon: 'fluent:error-circle-settings-16-regular'
       }
     }
   ]

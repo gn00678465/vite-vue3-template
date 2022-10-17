@@ -9,7 +9,11 @@ declare namespace AuthRoute {
     | 'not-found'
     | 'not-found-page'
     | 'application'
-    | 'application_license';
+    | 'application_license'
+    | 'error'
+    | 'error_403'
+    | 'error_404'
+    | 'error_500';
 
   type RouteModule = Record<string, { default: AuthRoute.Route }>;
 

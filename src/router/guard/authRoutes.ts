@@ -36,7 +36,7 @@ export async function createDynamicRouterGuard(
   }
 
   if (to.name === 'not-found') {
-    next({ name: 'not-found-page' });
+    next({ name: 'not-found-page', replace: true });
     return false;
   }
   return true;
