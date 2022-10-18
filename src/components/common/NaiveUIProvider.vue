@@ -8,8 +8,10 @@
   >
     <n-loading-bar-provider>
       <n-notification-provider>
-        <slot></slot>
-        <NaiveContentProvider />
+        <SwalProvider>
+          <slot></slot>
+          <NaiveContentProvider />
+        </SwalProvider>
       </n-notification-provider>
     </n-loading-bar-provider>
   </n-config-provider>
@@ -26,6 +28,7 @@ import {
   useLoadingBar,
   useNotification
 } from 'naive-ui';
+import { SwalProvider, useSwalDialog } from '../custom/SwalProvider';
 import { useThemeStore } from '@/stores';
 
 const theme = useThemeStore();
@@ -35,6 +38,7 @@ const NaiveContentProvider = defineComponent({
   setup() {
     window.$loadingBar = useLoadingBar();
     window.$notify = useNotification();
+    window.$swalDialog = useSwalDialog();
 
     return () => h('div');
   }

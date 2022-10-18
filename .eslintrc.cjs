@@ -19,6 +19,16 @@ module.exports = {
     parser: '@typescript-eslint/parser'
   },
   plugins: ['vue', '@typescript-eslint'],
-  rules: {},
+  rules: {
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        extendDefaults: true,
+        types: {
+          '{}': false
+        }
+      }
+    ]
+  },
   globals: { defineOptions: 'writable', defineRender: 'writable' }
 };
