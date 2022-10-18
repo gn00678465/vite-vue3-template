@@ -19,17 +19,15 @@ export default defineComponent({
         collapsed-width={collapsedWidth.value}
         width={240}
         collapsed={app.menuCollapse}
-        showTab={false}
-        showFooter={false}
+        showTab={true}
+        showFooter={true}
       >
         {{
           sider: () => (
             <GlobalSider collapsedWidth={collapsedWidth.value}></GlobalSider>
           ),
           header: () => <GlobalHeader></GlobalHeader>,
-          content: () => <GlobalContent></GlobalContent>,
-          tab: () => <div class="px-3 py-2">tab</div>,
-          footer: () => <div class="px-3 py-2">footer</div>
+          content: () => <GlobalContent></GlobalContent>
         }}
       </BasicLayout>
     );

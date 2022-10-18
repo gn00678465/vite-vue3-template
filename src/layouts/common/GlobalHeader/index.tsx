@@ -4,7 +4,8 @@ import {
   GlobalBreadcrumb,
   MenuCollapse,
   ThemeMode,
-  FullScreen
+  FullScreen,
+  UserAvatar
 } from './components';
 
 export default defineComponent({
@@ -22,6 +23,7 @@ export default defineComponent({
               <div class="flex items-center gap-x-2">
                 <ThemeMode />
                 <FullScreen />
+                <UserAvatar />
               </div>
             </div>
           )

@@ -25,6 +25,9 @@ declare namespace AuthRoute {
     hide?: boolean;
     /**外部連結 */
     href?: string;
+    permission?: string[];
+    /** content 樣式 */
+    contentType?: 'none' | 'card' | 'fixedCard';
   };
 
   interface Route {
