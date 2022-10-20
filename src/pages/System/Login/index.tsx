@@ -68,7 +68,7 @@ export default defineComponent({
                 {title}
               </NGradientText>
             </header>
-            <main class="pt-[24px]">
+            <main class="pt-6">
               <h3 class="text-[18px] text-primary font-medium">
                 {activeModule.value.label}
               </h3>
