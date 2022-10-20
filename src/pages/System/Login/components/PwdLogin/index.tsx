@@ -1,13 +1,15 @@
 import { defineComponent, reactive, ref } from 'vue';
 import { NForm, NFormItem, NInput, NSpace, NCheckbox, NButton } from 'naive-ui';
-import type { FormInst, FormRules } from 'naive-ui';
+import type { FormInst, FormRules, FormValidationError } from 'naive-ui';
 import { createRequireFormRule, formRules } from '@/utils';
 import { EnumLoginModules } from '@/enum';
+import { useAuthApi } from '@/service/api';
 
 export default defineComponent({
   name: 'PwdLogin',
   setup(props, ctx) {
     const formRef = ref<(HTMLElement & FormInst) | null>(null);
+    const { fetchLogin } = useAuthApi();
 
     const rememberMe = ref<boolean>(false);
 
@@ -23,7 +25,15 @@ export default defineComponent({
 
     async function handleSubmit(e: MouseEvent) {
       e.preventDefault();
-      await formRef.value?.validate();
+      formRef.value?.validate(
+        (error: Array<FormValidationError> | undefined) => {
+          if (!error) {
+            fetchLogin(model.userName, model.password).then((res) => {
+              console.log(res);
+            });
+          }
+        }
+      );
     }
 
     return () => (
