@@ -21,7 +21,7 @@ export function createRequest(config: AxiosRequestConfig) {
 
   async function setRequest<T>(
     param: RequestParam
-  ): Promise<AxiosResponse<T, any> | AxiosError<T, any>> {
+  ): Promise<Service.RequestResult<T>> {
     const { url } = param;
     const method = param.method || 'get';
     const { instance } = customInstance;
@@ -31,7 +31,7 @@ export function createRequest(config: AxiosRequestConfig) {
       url,
       data: param.data,
       config: param.axiosConfig
-    })) as AxiosResponse<T, any> | AxiosError<T, any>;
+    })) as Service.RequestResult<T>;
     return res;
   }
 

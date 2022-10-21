@@ -1,3 +1,15 @@
+export const REQUEST_TIMEOUT_CODE = 'ECONNABORTED';
+
+export const REQUEST_TIMEOUT_MSG = '請求逾時';
+
+export const NETWORK_ERROR_CODE = 'Network Error';
+
+export const NETWORK_ERROR_MSG = '網路不可用';
+
+export const DEFAULT_ERROR_CODE = 'default';
+
+export const DEFAULT_ERROR_MSG = '未知的錯誤';
+
 export const ERROR_STATUSCODE = new Map<number | 'default', string>([
   [400, '錯誤的請求'],
   [401, '拒絕存取'],
@@ -11,13 +23,5 @@ export const ERROR_STATUSCODE = new Map<number | 'default', string>([
   [503, '服務無法使用'],
   [504, '閘道逾時'],
   [505, '不支援的 HTTP 版本'],
-  ['default', '未知的錯誤']
+  [DEFAULT_ERROR_CODE, DEFAULT_ERROR_MSG]
 ]);
-
-export const REQUEST_TIMEOUT_CODE = 'ECONNABORTED';
-
-export const REQUEST_TIMEOUT_MSG = '請求逾時';
-
-export const NETWORK_ERROR_CODE = 'Network Error';
-
-export const NETWORK_ERROR_MSG = '網路不可用';

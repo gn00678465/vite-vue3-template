@@ -9,7 +9,8 @@ import {
   handleServiceResult,
   handleAuth,
   handleRequestHeader,
-  handleErrorStatusCode
+  handleNetworkError,
+  handleResponseError
 } from '@/utils';
 
 interface IInterceptors<T = AxiosResponse> {
@@ -40,26 +41,27 @@ export default class {
         handleConfig = handleAuth(handleConfig, 'token');
         return handleConfig;
       },
-      function (error: AxiosError) {
+      function (axiosError: AxiosError) {
         // Do something with request error
-        error = handleErrorStatusCode(error);
+        const error = handleNetworkError(axiosError);
         return handleServiceResult(error, null);
       }
     );
 
     this.instance.interceptors.response.use(
       function (response) {
-        const { status, data, config } = response;
+        const { status, data } = response;
         if (status === 200 || status < 300 || status === 304) {
           return handleServiceResult(null, data);
-          // refresh token here
+          // Refresh token here
         }
-        return response;
+        handleResponseError(response);
+        return handleServiceResult(null, response);
       },
-      function (error: AxiosError) {
+      function (axiosError: AxiosError) {
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
-        error = handleErrorStatusCode(error);
+        const error = handleNetworkError(axiosError);
         return handleServiceResult(error, null);
       }
     );
