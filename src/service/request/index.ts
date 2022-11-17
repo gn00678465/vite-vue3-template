@@ -9,3 +9,5 @@ export const request = createRequest({
     'Content-Type': 'application/json;charset=UTF-8'
   }
 });
+
+export const mockRequest = createRequest({ baseURL: '/mock' });
