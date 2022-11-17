@@ -1,7 +1,7 @@
 import { defineComponent, reactive, ref } from 'vue';
 import { NForm, NFormItem, NInput, NSpace, NCheckbox, NButton } from 'naive-ui';
 import type { FormInst, FormRules, FormValidationError } from 'naive-ui';
-import { createRequireFormRule, formRules } from '@/utils';
+import { formRules } from '@/utils';
 import { EnumLoginModules } from '@/enum';
 import { useAuthApi } from '@/service/api';
 
@@ -19,8 +19,8 @@ export default defineComponent({
     });
 
     const rules: FormRules = {
-      userName: [createRequireFormRule('使用者名稱不得為空')],
-      password: formRules.pwd
+      userName: formRules.userName,
+      password: formRules.password
     };
 
     async function handleSubmit(e: MouseEvent) {
@@ -29,7 +29,9 @@ export default defineComponent({
         (error: Array<FormValidationError> | undefined) => {
           if (!error) {
             fetchLogin(model.userName, model.password).then((res) => {
-              console.log(res);
+              const [error, data] = res;
+              console.log(error, data);
+              return res;
             });
           }
         }
