@@ -1,6 +1,7 @@
 import { routeName } from '@/router';
 import { useRouteStore } from '@/stores/modules/route';
 import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
+import { localStorage } from '@/utils';
 
 export async function createDynamicRouterGuard(
   to: RouteLocationNormalized,
@@ -8,7 +9,7 @@ export async function createDynamicRouterGuard(
   next: NavigationGuardNext
 ) {
   const route = useRouteStore();
-  const isLogin = true;
+  const isLogin = Boolean(localStorage.get('token'));
 
   if (!route.isInitAuthRoute) {
     if (!isLogin) {
@@ -16,15 +17,17 @@ export async function createDynamicRouterGuard(
       if (route.isValidConstRouteName(toName) && !to.meta.requiresAuth) {
         next();
       } else {
-        const redirect = to.fullPath;
-        next({ name: 'login', query: { redirect } });
+        // const redirect = to.fullPath;
+        // next({ name: routeName('login'), query: { redirect } });
+        next({ name: routeName('login') });
       }
       return false;
     }
     await route.initAuthRoute();
 
     if (to.name === 'not-found') {
-      const path = to.redirectedFrom?.name === 'root' ? '/' : to.fullPath;
+      const path =
+        to.redirectedFrom?.name === routeName('root') ? '/' : to.fullPath;
       next({
         path,
         replace: true,
@@ -36,7 +39,7 @@ export async function createDynamicRouterGuard(
   }
 
   if (to.name === 'not-found') {
-    next({ name: 'not-found-page', replace: true });
+    next({ name: routeName('not-found-page'), replace: true });
     return false;
   }
   return true;
