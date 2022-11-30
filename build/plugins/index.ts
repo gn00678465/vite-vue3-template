@@ -4,6 +4,7 @@ import { html } from './html';
 import VueMacros from 'unplugin-vue-macros/vite';
 import unplugin from './unplugin';
 import vitestConfig from './vitest.config';
+import { i18n } from './i18n';
 
 export default function (viteEnv, srcPath: string) {
   return [
@@ -15,6 +16,7 @@ export default function (viteEnv, srcPath: string) {
     }),
     ...unplugin(srcPath),
     html(viteEnv),
+    i18n(),
     vitestConfig
   ];
 }

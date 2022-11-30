@@ -6,12 +6,14 @@ import { InteractionType } from '@azure/msal-browser';
 import { useMsal, useIsAuthenticated, useMsalAuthentication } from './utils';
 import { loginRequest } from '@/config';
 import { useAuthStore } from '@/stores';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'OAuth',
   setup() {
     const { instance } = useMsal();
     const { handleAfterLogin, setLogoutHandler } = useAuthStore();
+    const { t } = useI18n();
 
     function handleLogin() {
       instance.loginPopup(loginRequest).then(async (res) => {
@@ -35,7 +37,7 @@ export default defineComponent({
           }}
           on-click={handleLogin}
         >
-          使用 Azure 登入
+          {t('azure_login')}
         </NButton>
       </div>
     );
