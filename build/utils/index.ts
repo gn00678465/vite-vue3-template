@@ -8,3 +8,5 @@ export function getSrcPath(pathName = 'src') {
   const rootPath = getRootPath();
   return `${rootPath}/${pathName}`;
 }
+
+export * from './proxy';

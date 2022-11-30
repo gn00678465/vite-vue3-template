@@ -2,7 +2,8 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    node: true
+    node: true,
+    'vue/setup-compiler-macros': true
   },
   extends: [
     'eslint:recommended',
@@ -18,5 +19,16 @@ module.exports = {
     parser: '@typescript-eslint/parser'
   },
   plugins: ['vue', '@typescript-eslint'],
-  rules: {}
+  rules: {
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        extendDefaults: true,
+        types: {
+          '{}': false
+        }
+      }
+    ]
+  },
+  globals: { defineOptions: 'writable', defineRender: 'writable' }
 };

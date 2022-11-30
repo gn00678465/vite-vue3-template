@@ -1,12 +1,11 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
-
-export default defineConfig({
+export default {
   test: {
     globals: true,
+    include: ['test/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     environment: 'happy-dom',
     transformMode: {
       web: [/\.[jt]sx$/]
     }
   }
-});
+};

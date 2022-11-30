@@ -1,8 +1,9 @@
 import { defineComponent, reactive, ref } from 'vue';
 import { NForm, NFormItem, NInput, NSpace, NCheckbox, NButton } from 'naive-ui';
-import type { FormInst, FormRules } from 'naive-ui';
-import { createRequireFormRule, formRules } from '@/utils';
+import type { FormInst, FormRules, FormValidationError } from 'naive-ui';
+import { formRules } from '@/utils';
 import { EnumLoginModules } from '@/enum';
+import { fetchLogin } from '@/service/api';
 
 export default defineComponent({
   name: 'PwdLogin',
@@ -17,13 +18,23 @@ export default defineComponent({
     });
 
     const rules: FormRules = {
-      userName: [createRequireFormRule('使用者名稱不得為空')],
-      password: formRules.pwd
+      userName: formRules.userName,
+      password: formRules.password
     };
 
     async function handleSubmit(e: MouseEvent) {
       e.preventDefault();
-      await formRef.value?.validate();
+      formRef.value?.validate(
+        (error: Array<FormValidationError> | undefined) => {
+          if (!error) {
+            fetchLogin(model.userName, model.password).then((res) => {
+              const [error, data] = res;
+              console.log(error, data);
+              return res;
+            });
+          }
+        }
+      );
     }
 
     return () => (
@@ -32,7 +43,7 @@ export default defineComponent({
         size="large"
         showLabel={false}
         model={model}
-        rules={rules}
+        // rules={rules}
       >
         <NFormItem path="userName" label="使用者名稱">
           <NInput

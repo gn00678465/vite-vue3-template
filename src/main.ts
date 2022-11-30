@@ -1,14 +1,21 @@
 import { createApp } from 'vue';
-
-import router from './router/index';
+import { setupRouter } from './router/index';
 import { setupStore } from './stores';
 import './style/index.css';
 // import './style.css';
 import App from './App.vue';
 
-const app = createApp(App);
+import { msalInstance, msalPlugin } from './plugins';
 
-setupStore(app);
+async function setupApp() {
+  const app = createApp(App);
+  setupStore(app);
 
-app.use(router);
-app.mount('#app');
+  app.use(msalPlugin, msalInstance);
+
+  await setupRouter(app);
+
+  app.mount('#app');
+}
+
+setupApp();

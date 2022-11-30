@@ -1,20 +1,11 @@
 <script setup lang="ts">
-import { NConfigProvider, zhTW, dateZhTW } from 'naive-ui';
-import { useThemeStore } from '@/stores';
-
-const theme = useThemeStore();
+import NaiveUIProvider from './components/common/NaiveUIProvider.vue';
 </script>
 
 <template>
-  <n-config-provider
-    class="h-full"
-    :locale="zhTW"
-    :data-locale="dateZhTW"
-    :preflight-style-disable="true"
-    :theme="theme.naiveTheme"
-  >
+  <NaiveUIProvider>
     <RouterView />
-  </n-config-provider>
+  </NaiveUIProvider>
 </template>
 
 <style scoped></style>
