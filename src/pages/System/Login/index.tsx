@@ -5,7 +5,7 @@ import { useAppInfo } from '@/composables';
 import { useThemeStore } from '@/stores';
 import { NCard, NGradientText, NSwitch } from 'naive-ui';
 import { Icon } from '@iconify/vue';
-import { PwdLogin } from './components';
+import { PwdLogin, OAuth } from './components';
 import SystemLogo from '@/components/common/SystemLogo.vue';
 
 interface LoginModule {
@@ -32,11 +32,16 @@ export default defineComponent({
         key: 'pwd-login',
         label: EnumLoginModules['pwd-login'],
         component: PwdLogin
+      },
+      {
+        key: 'oauth',
+        label: EnumLoginModules['oauth'],
+        component: OAuth
       }
     ];
 
     const activeModule = computed(() => {
-      const active: LoginModule = { ...modules[0] };
+      const active: LoginModule = { ...modules[1] };
       return active;
     });
 

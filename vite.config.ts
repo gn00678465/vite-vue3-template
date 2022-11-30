@@ -29,6 +29,11 @@ export default defineConfig((configEnv) => {
       port: 3002,
       host: '0.0.0.0',
       proxy: createViteProxy(isOpenProxy, envConfig),
-    }
+      https: {
+        key: fs.readFileSync('./localhost+3-key.pem'),
+        cert: fs.readFileSync('./localhost+3.pem')
+      }
+    },
+    logLevel: 'warn'
   };
 });

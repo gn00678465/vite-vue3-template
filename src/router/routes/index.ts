@@ -1,7 +1,7 @@
 export const ROOT_ROUTER: AuthRoute.Route = {
   name: 'root',
   path: '/',
-  redirect: import.meta.env.VITE_BASE_ROUTE_PATH,
+  redirect: import.meta.env.VITE_ROUTE_HOME_PATH,
   meta: {
     title: 'root'
   }
