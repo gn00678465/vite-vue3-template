@@ -5,7 +5,8 @@ import {
   MenuCollapse,
   ThemeMode,
   FullScreen,
-  UserAvatar
+  UserAvatar,
+  MultiLocale
 } from './components';
 
 export default defineComponent({
@@ -22,6 +23,7 @@ export default defineComponent({
               </div>
               <div class="flex items-center gap-x-2">
                 <ThemeMode />
+                <MultiLocale />
                 <FullScreen />
                 <UserAvatar />
               </div>

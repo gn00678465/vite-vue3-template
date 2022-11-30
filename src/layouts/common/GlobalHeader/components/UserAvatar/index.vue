@@ -5,19 +5,22 @@ import type { DropdownOption } from 'naive-ui';
 import HoverContainer from '@/components/common/HoverContainer.vue';
 import { useRenderIcon } from '@/composables';
 import { useAuthStore } from '@/stores';
+import { useI18n } from 'vue-i18n';
 
 defineOptions({ name: 'UserAvatar' });
 
 const { userInfo, resetAuthStore, handleLogout } = useAuthStore();
 
+const { t } = useI18n();
+
 const options = computed<DropdownOption[]>(() => [
   {
-    label: 'Profile',
+    label: t('profile'),
     key: 'profile',
     icon: useRenderIcon({ icon: 'mdi:account-circle' })
   },
   {
-    label: 'Logout',
+    label: t('logout'),
     key: 'logout',
     icon: useRenderIcon({ icon: 'mdi:logout' }),
     props: {

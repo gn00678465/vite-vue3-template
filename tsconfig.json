@@ -16,7 +16,7 @@
       "~/*": ["./*"],
       "@/*": ["./src/*"]
     },
-    "types": ["unplugin-icons/types/vue", "unplugin-vue-macros/macros-global"]
+    "types": ["unplugin-icons/types/vue", "unplugin-vue-macros/macros-global", "@intlify/vite-plugin-vue-i18n/client"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vitest/globals"],
   "references": [{ "path": "./tsconfig.node.json" }]

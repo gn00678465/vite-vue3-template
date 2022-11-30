@@ -5,13 +5,15 @@ import './style/index.css';
 // import './style.css';
 import App from './App.vue';
 
-import { msalInstance, msalPlugin } from './plugins';
+import { msalInstance, msalPlugin, setupI18n } from './plugins';
 
 async function setupApp() {
   const app = createApp(App);
   setupStore(app);
 
   app.use(msalPlugin, msalInstance);
+
+  setupI18n(app);
 
   await setupRouter(app);
 
