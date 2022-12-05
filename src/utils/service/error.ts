@@ -1,19 +1,16 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import {
-  ERROR_STATUSCODE,
   REQUEST_TIMEOUT_CODE,
   REQUEST_TIMEOUT_MSG,
   NETWORK_ERROR_CODE,
   NETWORK_ERROR_MSG,
   DEFAULT_ERROR_CODE,
-  DEFAULT_ERROR_MSG
+  DEFAULT_ERROR_MSG,
+  ERROR_STATUS_CODE
 } from '@/config';
 import { execStrategyActions } from '../common';
 
-type KeyOfMap<M extends Map<unknown, unknown>> = M extends Map<infer K, unknown>
-  ? K
-  : never;
-type ErrorStatusCode = KeyOfMap<typeof ERROR_STATUSCODE>;
+type ErrorStatusCode = keyof typeof ERROR_STATUS_CODE;
 
 export function handleNetworkError(axiosErr: AxiosError) {
   const error: Service.RequestError = {
@@ -43,12 +40,12 @@ export function handleNetworkError(axiosErr: AxiosError) {
     [
       Boolean(axiosErr.response),
       () => {
-        const errorCode: ErrorStatusCode =
-          (axiosErr.response?.status as ErrorStatusCode) || 'default';
+        const errorCode = (axiosErr.response?.status ||
+          'DEFAULT') as ErrorStatusCode;
 
         Object.assign(error, {
           code: errorCode,
-          message: ERROR_STATUSCODE.get(errorCode) as string
+          message: ERROR_STATUS_CODE[errorCode] as string
         });
       }
     ]

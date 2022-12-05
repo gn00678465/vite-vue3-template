@@ -4,6 +4,11 @@ declare namespace Service {
     message: string;
   }
 
+  interface ResponseError {
+    Status: string;
+    Message: string;
+  }
+
   type SuccessResult<T> = [null, T];
 
   type FailedResult = [RequestError, null];

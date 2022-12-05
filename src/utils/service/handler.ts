@@ -1,4 +1,5 @@
 import type { AxiosResponse, AxiosRequestConfig, AxiosError } from 'axios';
+import { transformRequestData } from './transform';
 
 /**
  * 統一處理 axios result
@@ -17,14 +18,24 @@ export function handleAuth(
   config: AxiosRequestConfig,
   token: string
 ): AxiosRequestConfig {
+  if (
+    /\/web\/userInfo/.test(config.url as string) ||
+    /\/web\/exchange-token/.test(config.url as string)
+  ) {
+    return config;
+  }
   if (config.headers) {
-    config.headers.Authorization = token;
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 }
 
-export function handleRequestHeader(
+export async function handleRequestHeader(
   config: AxiosRequestConfig
-): AxiosRequestConfig {
+): Promise<AxiosRequestConfig> {
+  if (config.headers) {
+    const contentType = config.headers['Content-Type'] as string;
+    config.data = await transformRequestData(config.data, contentType);
+  }
   return config;
 }

@@ -12,7 +12,7 @@ type RequestMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
 interface RequestParam {
   url: string;
   method?: RequestMethod;
-  data?: any;
+  data?: unknown;
   axiosConfig?: AxiosRequestConfig;
 }
 
@@ -39,15 +39,15 @@ export function createRequest(config: AxiosRequestConfig) {
     return setRequest<T>({ url, method: 'get', axiosConfig: config });
   }
 
-  function post<T>(url: string, data: any, config?: AxiosRequestConfig) {
+  function post<T>(url: string, data: unknown, config?: AxiosRequestConfig) {
     return setRequest<T>({ url, method: 'post', data, axiosConfig: config });
   }
 
-  function put<T>(url: string, data: any, config?: AxiosRequestConfig) {
+  function put<T>(url: string, data: unknown, config?: AxiosRequestConfig) {
     return setRequest<T>({ url, method: 'put', data, axiosConfig: config });
   }
 
-  function patch<T>(url: string, data: any, config?: AxiosRequestConfig) {
+  function patch<T>(url: string, data: unknown, config?: AxiosRequestConfig) {
     return setRequest<T>({ url, method: 'patch', data, axiosConfig: config });
   }
 
