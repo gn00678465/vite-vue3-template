@@ -4,7 +4,8 @@ import {
   BasicLayout,
   GlobalContent,
   GlobalHeader,
-  GlobalSider
+  GlobalSider,
+  GlobalTab
 } from '../common';
 import { useAppStore } from '@/stores';
 
@@ -26,6 +27,7 @@ export default defineComponent({
           sider: () => (
             <GlobalSider collapsedWidth={collapsedWidth.value}></GlobalSider>
           ),
+          tab: () => <GlobalTab />,
           header: () => <GlobalHeader></GlobalHeader>,
           content: () => <GlobalContent></GlobalContent>
         }}

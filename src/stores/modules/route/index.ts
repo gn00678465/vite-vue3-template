@@ -11,12 +11,18 @@ import {
   filterWithoutPermission,
   transformToVueRoutes,
   transformToMenu,
-  getConstantRouteNames
+  getConstantRouteNames,
+  transformRoutePathToRouteName
 } from '@/utils';
+import { useAuthStore } from '../auth';
+import { useTabStore } from '../tab';
 
 export const useRouteStore = defineStore('route-store', () => {
   const isInitAuthRoute: Ref<boolean> = ref(false);
   const menus: Ref<GlobalMenuOption[]> = ref([]);
+  const routeHomeName: Ref<string> = ref(
+    transformRoutePathToRouteName(import.meta.env.VITE_ROUTE_HOME_PATH)
+  );
 
   function isValidConstRouteName(name: AuthRoute.RouteKey) {
     return (
@@ -34,8 +40,11 @@ export const useRouteStore = defineStore('route-store', () => {
   }
 
   async function initAuthRoute() {
+    const { initHomeTab } = useTabStore();
+
     const routes = filterWithoutPermission(authRoutes);
     handleAuthRoutes(routes);
+    initHomeTab(routeHomeName.value, router);
     isInitAuthRoute.value = true;
   }
 

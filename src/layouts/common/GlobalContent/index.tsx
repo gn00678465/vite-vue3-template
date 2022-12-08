@@ -1,10 +1,13 @@
 import { defineComponent, Transition, computed, h } from 'vue';
 import type { ComputedRef, Component } from 'vue';
 import type { RouteLocationNormalized, RouteComponent } from 'vue-router';
+import { useAppStore } from '@/stores';
 
 export default defineComponent({
   name: 'GlobalContent',
   setup(props) {
+    const app = useAppStore();
+
     return () => (
       <router-view>
         {{
@@ -12,11 +15,11 @@ export default defineComponent({
             Component,
             route
           }: {
-            Component: RouteComponent;
+            Component: any;
             route: RouteLocationNormalized;
           }) => (
             <Transition name="fade-slide" mode="out-in" appear>
-              <Component key={route.fullPath} />
+              {app.reloadFlag && <Component key={route.fullPath} />}
             </Transition>
           )
         }}
