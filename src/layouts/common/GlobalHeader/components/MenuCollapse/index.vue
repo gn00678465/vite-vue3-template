@@ -1,5 +1,5 @@
 <template>
-  <HoverContainer @on-click="app.toggleMenuCollapse">
+  <HoverContainer class="w-[40px] h-full" @on-click="app.toggleMenuCollapse">
     <Collapse v-if="app.menuCollapse" />
     <Expand v-else />
   </HoverContainer>

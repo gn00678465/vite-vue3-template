@@ -1,5 +1,9 @@
 <template>
-  <HoverContainer content="深色模式" @on-click="toggleThemeMode">
+  <HoverContainer
+    class="w-[40px] h-full"
+    content="深色模式"
+    @on-click="toggleThemeMode"
+  >
     <Moon v-if="theme.darkMode" />
     <Sun v-else />
   </HoverContainer>

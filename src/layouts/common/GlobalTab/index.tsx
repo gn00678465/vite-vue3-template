@@ -24,8 +24,8 @@ export default defineComponent({
     );
 
     return () => (
-      <div class="flex items-center  w-full pl-4 shadow-tab pt-1">
-        <div class="flex-1 overflow-hidden h-full">
+      <div class="flex w-full pl-4 shadow-tab h-[42px]">
+        <div class="flex-1 self-end overflow-hidden">
           <Tabs />
         </div>
         <ReloadButton />

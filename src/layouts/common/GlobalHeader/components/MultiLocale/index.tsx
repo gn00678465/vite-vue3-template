@@ -35,7 +35,7 @@ export default defineComponent({
 
     return () => (
       <NDropdown options={options.value}>
-        <HoverContainer>
+        <HoverContainer class="w-[40px] h-full">
           <Icon icon="mdi:translate" width="18" height="18"></Icon>
         </HoverContainer>
       </NDropdown>

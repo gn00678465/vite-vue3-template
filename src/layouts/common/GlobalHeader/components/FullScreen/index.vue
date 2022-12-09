@@ -36,7 +36,7 @@ const Minimize = () =>
 </script>
 
 <template>
-  <HoverContainer content="全螢幕" @on-click="toggle">
+  <HoverContainer class="w-[40px] h-full" content="全螢幕" @on-click="toggle">
     <Maximize v-if="!isFullscreen" />
     <Minimize v-else />
   </HoverContainer>

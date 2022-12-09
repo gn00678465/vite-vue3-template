@@ -1,4 +1,4 @@
-import { defineComponent, Transition, computed, h } from 'vue';
+import { defineComponent, Transition, KeepAlive } from 'vue';
 import type { ComputedRef, Component } from 'vue';
 import type { RouteLocationNormalized, RouteComponent } from 'vue-router';
 import { useAppStore } from '@/stores';
@@ -19,7 +19,9 @@ export default defineComponent({
             route: RouteLocationNormalized;
           }) => (
             <Transition name="fade-slide" mode="out-in" appear>
-              {app.reloadFlag && <Component key={route.fullPath} />}
+              <KeepAlive>
+                {app.reloadFlag && <Component key={route.fullPath} />}
+              </KeepAlive>
             </Transition>
           )
         }}

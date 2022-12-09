@@ -1,5 +1,4 @@
-import { defineComponent, ref } from 'vue';
-import { NCard } from 'naive-ui';
+import { defineComponent } from 'vue';
 import {
   GlobalBreadcrumb,
   MenuCollapse,
@@ -13,24 +12,18 @@ export default defineComponent({
   name: 'GlobalHeader',
   setup() {
     return () => (
-      <NCard bordered={false} size="small">
-        {{
-          default: () => (
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-x-2">
-                <MenuCollapse />
-                <GlobalBreadcrumb />
-              </div>
-              <div class="flex items-center gap-x-2">
-                <ThemeMode />
-                <MultiLocale />
-                <FullScreen />
-                <UserAvatar />
-              </div>
-            </div>
-          )
-        }}
-      </NCard>
+      <div class="h-full flex items-center justify-between border-b">
+        <div class="h-full flex items-center gap-x-1">
+          <MenuCollapse />
+          <GlobalBreadcrumb />
+        </div>
+        <div class="h-full flex items-center">
+          <ThemeMode />
+          <MultiLocale />
+          <FullScreen />
+          <UserAvatar />
+        </div>
+      </div>
     );
   }
 });

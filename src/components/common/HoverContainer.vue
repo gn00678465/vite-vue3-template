@@ -3,7 +3,7 @@
     <NTooltip trigger="hover" :placement="placement">
       <template #trigger>
         <div
-          class="flex items-center justify-center cursor-pointer"
+          class="h-full flex items-center justify-center cursor-pointer hover:bg-[#f6f6f6]"
           :class="props.className"
           @click="() => emit('on-click')"
         >
@@ -17,7 +17,7 @@
   </div>
   <div
     v-else
-    class="flex items-center justify-center cursor-pointer"
+    class="h-full flex items-center justify-center cursor-pointer hover:bg-[#f6f6f6]"
     :class="props.className"
     @click="() => emit('on-click')"
   >
