@@ -3,6 +3,7 @@ declare namespace StorageInterface {
     token: string;
     refreshToken: string;
     userInfo: Auth.UserInfo;
+    multiTabRoutes: App.GlobalTabRoute[];
     loginType: 'azure' | string;
   }
 }

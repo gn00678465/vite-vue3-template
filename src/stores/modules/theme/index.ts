@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue';
+import { ref, computed, reactive } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
 import { defineStore } from 'pinia';
 import { darkTheme } from 'naive-ui';
@@ -6,6 +6,7 @@ import type { GlobalTheme } from 'naive-ui';
 
 export const useThemeStore = defineStore('theme-store', () => {
   const darkMode: Ref<boolean> = ref(false);
+  const tab = reactive({ isCache: true, mode: 'chrome' });
 
   const naiveTheme: ComputedRef<GlobalTheme | null> = computed(() => {
     return darkMode.value ? darkTheme : null;
@@ -15,5 +16,5 @@ export const useThemeStore = defineStore('theme-store', () => {
     darkMode.value = setMode;
   }
 
-  return { darkMode, naiveTheme, setDarkMode };
+  return { darkMode, naiveTheme, setDarkMode, tab };
 });

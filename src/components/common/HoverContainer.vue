@@ -1,21 +1,23 @@
 <template>
-  <NTooltip v-if="showTooltip" trigger="hover" :placement="placement">
-    <template #trigger>
-      <div
-        class="cursor-pointer"
-        :class="props.className"
-        @click="() => emit('on-click')"
-      >
-        <slot></slot>
-      </div>
-    </template>
-    <template #default>
-      {{ props.content }}
-    </template>
-  </NTooltip>
+  <div v-if="showTooltip">
+    <NTooltip trigger="hover" :placement="placement">
+      <template #trigger>
+        <div
+          class="flex items-center justify-center cursor-pointer"
+          :class="props.className"
+          @click="() => emit('on-click')"
+        >
+          <slot></slot>
+        </div>
+      </template>
+      <template #default>
+        {{ props.content }}
+      </template>
+    </NTooltip>
+  </div>
   <div
     v-else
-    class="cursor-pointer"
+    class="flex items-center justify-center cursor-pointer"
     :class="props.className"
     @click="() => emit('on-click')"
   >
