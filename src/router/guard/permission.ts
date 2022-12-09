@@ -34,5 +34,7 @@ export async function createPermissionGuard(
     next({ name: routeName('login') });
   }
 
-  next();
+  if (isLogin && needLogin) {
+    next();
+  }
 }

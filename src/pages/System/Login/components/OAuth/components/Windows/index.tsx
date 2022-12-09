@@ -3,27 +3,23 @@ import type { Ref } from 'vue';
 import { NButton } from 'naive-ui';
 import { Icon } from '@iconify/vue';
 import { InteractionType } from '@azure/msal-browser';
-import { useMsal, useIsAuthenticated, useMsalAuthentication } from './utils';
+import { useMsal } from './utils';
 import { loginRequest } from '@/config';
 import { useAuthStore } from '@/stores';
-import { useI18n } from 'vue-i18n';
+import { useI18n } from '@/hooks';
+import { localStorage } from '@/utils';
 
 export default defineComponent({
   name: 'OAuth',
   setup() {
     const { instance } = useMsal();
-    const { handleAfterLogin, setLogoutHandler } = useAuthStore();
+    const { handleAfterLogin } = useAuthStore();
     const { t } = useI18n();
 
     function handleLogin() {
       instance.loginPopup(loginRequest).then(async (res) => {
         await handleAfterLogin(res.accessToken);
-        setLogoutHandler(() => {
-          const res = instance.logoutPopup({
-            mainWindowRedirectUri: '/'
-          });
-          return res;
-        });
+        localStorage.set('loginType', 'azure');
       });
     }
 
@@ -37,7 +33,7 @@ export default defineComponent({
           }}
           on-click={handleLogin}
         >
-          {t('azure_login')}
+          {t('sys.azure_login')}
         </NButton>
       </div>
     );

@@ -1,32 +1,23 @@
 import { getLayoutComponent } from '@/utils';
 
 const application: AuthRoute.Route = {
-  name: 'application',
+  name: 'application-form',
   path: '/application',
   component: getLayoutComponent('basic'),
-  redirectPath: '/application/license',
+  redirectPath: '/application-form/list-view',
   meta: {
-    title: '申請表單',
-    icon: 'fluent:form-new-20-regular'
+    title: '表單申請',
+    icon: 'fluent:form-new-20-regular',
+    order: 2
   },
   children: [
     {
-      name: 'application_license',
-      path: '/application/license',
-      component: () => import('@/pages/application/license'),
+      name: 'application-form_list-view',
+      path: '/application-form/list-view',
+      component: () => import('@/pages/application/ListView'),
       meta: {
-        title: '授權申請',
+        title: '申請單列表',
         icon: 'clarity:license-line',
-        requiresAuth: true
-      }
-    },
-    {
-      name: 'application_log',
-      path: '/application/log',
-      component: () => import('@/pages/application/license'),
-      meta: {
-        title: '申請紀錄',
-        icon: 'octicon:log-24',
         requiresAuth: true
       }
     }

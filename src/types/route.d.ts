@@ -1,20 +1,6 @@
 declare namespace AuthRoute {
   type RouteSplitMark = '_';
 
-  type RouteKey =
-    | 'root'
-    | 'login'
-    | 'no-permission'
-    | 'service-error'
-    | 'not-found'
-    | 'not-found-page'
-    | 'application'
-    | 'application_license'
-    | 'error'
-    | 'error_403'
-    | 'error_404'
-    | 'error_500';
-
   type RouteModule = Record<string, { default: AuthRoute.Route }>;
 
   type RouteMeta = {
@@ -28,10 +14,12 @@ declare namespace AuthRoute {
     permission?: string[];
     /** content 樣式 */
     contentType?: 'none' | 'card' | 'fixedCard';
+    /** 順序 */
+    order?: number;
   };
 
   interface Route {
-    name: RouteKey;
+    name: RoutePage.RouteKey;
     path: string;
     component?: RouteComponent;
     redirect?: string;

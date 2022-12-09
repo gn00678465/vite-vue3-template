@@ -3,5 +3,6 @@ declare namespace StorageInterface {
     token: string;
     refreshToken: string;
     userInfo: Auth.UserInfo;
+    loginType: 'azure' | string;
   }
 }

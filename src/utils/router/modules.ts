@@ -1,3 +1,11 @@
+function sortRoutes(routes: AuthRoute.Route[]) {
+  return routes.sort(handleSort);
+}
+
+function handleSort(next: AuthRoute.Route, prev: AuthRoute.Route) {
+  return Number(next.meta?.order) - Number(prev.meta?.order);
+}
+
 export function handleRouteModules(modules: AuthRoute.RouteModule) {
   const routes: AuthRoute.Route[] = [];
   Object.keys(modules).forEach((module) => {
@@ -9,5 +17,5 @@ export function handleRouteModules(modules: AuthRoute.RouteModule) {
     }
   });
 
-  return routes;
+  return sortRoutes(routes);
 }

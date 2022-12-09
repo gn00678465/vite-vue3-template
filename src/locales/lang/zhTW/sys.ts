@@ -6,6 +6,11 @@ export default {
   login_success: '登入成功!',
   login_success_message: '歡迎回來',
   api: {
+    tokenExpired: 'AccessToken 過期',
+    refreshTokenExpired: 'RefreshToken 過期',
+    noToken: 'Token 未帶入',
+    success: '成功',
+    error: '錯誤',
     errMsg400: '錯誤的請求!',
     errMsg401: '拒絕存取!',
     errMsg403: '拒絕訪問!',

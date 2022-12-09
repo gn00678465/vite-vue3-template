@@ -1,52 +1,75 @@
 import { unref } from 'vue';
 import { defineStore } from 'pinia';
-import { fetchUserInfo } from '@/service/api';
+import { fetchUserInfo, fetchUserPermission } from '@/service/api';
 import { localStorage } from '@/utils';
 import { router } from '@/router';
 import { getToken, cleanAuthStorage, getUserInfo } from './helpers';
 import { useRouterPush } from '@/composables';
 import { useRouteStore } from '../route';
+import { useI18n } from '@/hooks';
 
 interface AuthState {
   userInfo: Auth.UserInfo;
   token: string;
   loginLoading: boolean;
-  logoutHandler: (() => void) | null;
 }
 
 const useAuthStore = defineStore('auth-store', {
   state: (): AuthState => ({
     userInfo: getUserInfo(),
     token: getToken(),
-    loginLoading: false,
-    logoutHandler: null
+    loginLoading: false
   }),
   getters: {
     isLogin(state) {
       return Boolean(state.token);
+    },
+    isAdmin(state) {
+      return state.userInfo?.Role === 'Admin';
     }
   },
   actions: {
+    /**
+     * 使用 Azure token 取得 Backend Token
+     * @param accessToken Azure AccessToken
+     */
     async loginByToken(accessToken: string) {
       let flag = false;
       const [error, data] = await fetchUserInfo(accessToken);
       if (data) {
-        const { AccessToken, RefreshToken, Username } = data;
-        localStorage.set('token', AccessToken);
-        localStorage.set('refreshToken', RefreshToken);
-        localStorage.set('userInfo', { Username });
+        const { AccessToken, RefreshToken } = data;
 
-        this.token = AccessToken;
-        this.userInfo = { Username };
+        this.updateToken(AccessToken, RefreshToken);
+
+        await this.updateUserInfo();
 
         flag = true;
       }
 
       return flag;
     },
+    /** 存放 token 到 localStorage */
+    updateToken(AccessToken: string, RefreshToken: string) {
+      localStorage.set('token', AccessToken);
+      localStorage.set('refreshToken', RefreshToken);
+      this.token = AccessToken;
+    },
+    /** 取得登入者權限 */
+    async updateUserInfo() {
+      const [err, data] = await fetchUserPermission();
+      if (data) {
+        localStorage.set('userInfo', data);
+        Object.assign(this.userInfo, data);
+      }
+    },
+    /**
+     * 登入 Azure 後執行
+     * @param accessToken Azure AccessToken
+     */
     async handleAfterLogin(accessToken: string) {
       const { toLoginDirective } = useRouterPush(false);
       const store = useRouteStore();
+      const { t } = useI18n();
 
       const successLogin = await this.loginByToken(accessToken);
 
@@ -60,8 +83,8 @@ const useAuthStore = defineStore('auth-store', {
             toast: true,
             position: 'top-end',
             timer: 3000,
-            title: '登入成功',
-            text: `Welcome back ${this.userInfo.Username}`,
+            title: t('sys.login_success'),
+            text: `${t('sys.login_success_message')} ${this.userInfo.Username}`,
             showConfirmButton: false
           });
         }
@@ -70,37 +93,16 @@ const useAuthStore = defineStore('auth-store', {
     /**
      * 清除登入相關資料
      */
-    async resetAuthStore() {
-      this.$reset();
-      cleanAuthStorage();
-    },
-    /**
-     * 清除登入相關資料並重導向
-     */
-    async resetAuthStoreWithRedirect() {
+    async resetAuthStore(redirect = false) {
       const { toLogin } = useRouterPush(false);
       const route = unref(router.currentRoute);
 
-      if (route.meta.requiresAuth) {
+      if (route.meta.requiresAuth && redirect) {
         toLogin();
       }
 
       this.$reset();
       cleanAuthStorage();
-    },
-    /**
-     * 設定登出 function(3-party library)
-     * @param fun 登出 function
-     */
-    setLogoutHandler(fun: () => void) {
-      this.logoutHandler = fun;
-    },
-    /**
-     * 登出用函式
-     */
-    async handleLogout() {
-      const res = await this.logoutHandler?.();
-      return res;
     }
   }
 });

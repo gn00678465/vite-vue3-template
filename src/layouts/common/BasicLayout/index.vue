@@ -7,8 +7,11 @@ export default {
 <script setup lang="ts">
 import { provide, ref, useSlots, useAttrs, computed } from 'vue';
 import { ComputedRef } from 'vue';
-import { useElementSize, useWindowSize } from '@vueuse/core';
-import type { MaybeComputedElementRef } from '@vueuse/core';
+import {
+  useElementSize,
+  useWindowSize,
+  MaybeComputedElementRef
+} from '@vueuse/core';
 import { useLayoutStore } from '@/stores';
 import {
   NLayout,

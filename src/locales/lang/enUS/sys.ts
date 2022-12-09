@@ -6,6 +6,11 @@ export default {
   login_success: 'Login success!',
   login_success_message: 'Welcome back',
   api: {
+    tokenExpired: 'AccessToken expired',
+    refreshTokenExpired: 'RefreshToken expired',
+    noToken: 'Token not exist',
+    success: 'Success',
+    error: 'Error',
     errMsg400: 'Bad Request!',
     errMsg401:
       'The user does not have permission (token, user name, password error)!',

@@ -11,6 +11,12 @@ type TScrollOption = {
 
 export type TScrollMethod = (arg0: TScrollOption) => void;
 
+export type FixedCardSlots = {
+  contentHeight: ComputedRef<number>;
+  scrollTo: TScrollMethod;
+  scrollBy: TScrollMethod;
+};
+
 export default defineComponent({
   name: 'FixedCard',
   props: {
