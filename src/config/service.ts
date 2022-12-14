@@ -36,3 +36,5 @@ export const ERROR_STATUS_CODE = {
 
 // error message
 export const ERROR_MSG_DURATION = 500;
+// error notification
+export const ERROR_NOTIFY_DURATION = 1500;

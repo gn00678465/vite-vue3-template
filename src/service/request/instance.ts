@@ -12,7 +12,8 @@ import {
   handleNetworkError,
   handleResponseError,
   localStorage,
-  showMessage
+  showMessage,
+  execStrategyActions
 } from '@/utils';
 import { AxiosCanceler } from '@/utils/service/cancel';
 import handleRefreshToken from './helpers';
@@ -22,16 +23,6 @@ import {
   REFRESH_EXPIRED_CODE,
   WITHOUT_TOKEN_CODE
 } from '@/config';
-
-// interface IInterceptors<T = AxiosResponse> {
-//   requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig;
-//   requestInterceptorCatch?: (error: any) => any;
-//   responseInterceptor?: (response: T) => T;
-//   responseInterceptorCatch?: (error: any) => any;
-// }
-// interface IOption<T = AxiosResponse> {
-//   interceptors?: IInterceptors<T>;
-// }
 
 export default class {
   instance: AxiosInstance;
@@ -91,28 +82,42 @@ export default class {
 
         const error = handleNetworkError(axiosError);
 
-        const { Message } = axiosError?.response?.data as Service.ResponseError;
-        const { resetAuthStore } = useAuthStore();
+        if (axiosError?.response) {
+          const { Message } = axiosError?.response
+            ?.data as Service.ResponseError;
+          const { resetAuthStore } = useAuthStore();
 
-        switch (error.code) {
-          case 401: {
-            switch (Message) {
-              case TOKEN_EXPIRED_CODE: {
-                const config = await handleRefreshToken(axiosError);
-                if (config) {
-                  return this.instance.request(config);
+          switch (error.code) {
+            case 401: {
+              switch (Message) {
+                case TOKEN_EXPIRED_CODE: {
+                  const config = await handleRefreshToken(axiosError);
+                  if (config) {
+                    return this.instance.request(config);
+                  }
+                  break;
                 }
-                break;
-              }
-              case REFRESH_EXPIRED_CODE: {
-                Object.assign(error, { message: 'RefreshToken 過期' });
-                resetAuthStore(true);
-                break;
-              }
-              case WITHOUT_TOKEN_CODE: {
-                Object.assign(error, { message: 'Token 未帶入' });
-                resetAuthStore(true);
-                break;
+                case REFRESH_EXPIRED_CODE: {
+                  (async () => {
+                    Object.assign(error, { message: 'RefreshToken 過期' });
+                    resetAuthStore(true);
+                  })();
+                  break;
+                }
+                case WITHOUT_TOKEN_CODE: {
+                  (async () => {
+                    Object.assign(error, { message: 'Token 未帶入' });
+                    resetAuthStore(true);
+                  })();
+                  break;
+                }
+                case 'token is malformed': {
+                  (async () => {
+                    Object.assign(error, { message: 'Token 錯誤' });
+                    resetAuthStore(true);
+                  })();
+                  break;
+                }
               }
             }
           }
@@ -124,15 +129,4 @@ export default class {
       }
     );
   }
-
-  // setOptInterceptor(option: IOption) {
-  //   this.instance.interceptors.request.use(
-  //     option.interceptors?.requestInterceptor,
-  //     option.interceptors?.requestInterceptorCatch
-  //   );
-  //   this.instance.interceptors.response.use(
-  //     option.interceptors?.responseInterceptor,
-  //     option.interceptors?.responseInterceptorCatch
-  //   );
-  // }
 }
