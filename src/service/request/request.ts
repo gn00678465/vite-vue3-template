@@ -31,7 +31,7 @@ export function createRequest(config: AxiosRequestConfig) {
       url,
       data: param.data,
       config: param.axiosConfig
-    })) as Service.RequestResult<T>;
+    })) as unknown as Service.RequestResult<T>;
     return res;
   }
 

@@ -6,10 +6,7 @@ import {
   NETWORK_ERROR_MSG,
   DEFAULT_ERROR_CODE,
   DEFAULT_ERROR_MSG,
-  ERROR_STATUS_CODE,
-  TOKEN_EXPIRED_CODE,
-  REFRESH_EXPIRED_CODE,
-  WITHOUT_TOKEN_CODE
+  ERROR_STATUS_CODE
 } from '@/config';
 import { execStrategyActions } from '../common';
 import { useAuthStore } from '@/stores';
@@ -58,4 +55,11 @@ export function handleNetworkError(axiosErr: AxiosError) {
   return error;
 }
 
-export function handleResponseError(axiosError: AxiosError) {}
+export function handleResponseError(
+  response: AxiosResponse
+): Service.ResponseError | null {
+  if (response.data?.Status === 'Error') {
+    return response.data;
+  }
+  return null;
+}

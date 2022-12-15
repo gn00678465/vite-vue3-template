@@ -16,7 +16,9 @@ export const TOKEN_EXPIRED_CODE = 'AccessToken expired';
 /** refresh token 過期 */
 export const REFRESH_EXPIRED_CODE = 'RefreshToken expired';
 /** 未帶入 token */
-export const WITHOUT_TOKEN_CODE = 'no token';
+export const WITHOUT_TOKEN_CODE = 'No Token';
+/** Token 異常 */
+export const TOKEN_ABNORMAL = 'token is malformed';
 
 export const ERROR_STATUS_CODE = {
   400: '錯誤的請求',

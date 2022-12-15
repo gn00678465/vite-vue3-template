@@ -21,8 +21,10 @@ import { useAuthStore } from '@/stores';
 import {
   TOKEN_EXPIRED_CODE,
   REFRESH_EXPIRED_CODE,
-  WITHOUT_TOKEN_CODE
+  WITHOUT_TOKEN_CODE,
+  TOKEN_ABNORMAL
 } from '@/config';
+import { useI18n } from '@/hooks';
 
 export default class {
   instance: AxiosInstance;
@@ -37,6 +39,7 @@ export default class {
 
   setInterceptor() {
     // const axiosCanceler = new AxiosCanceler();
+    const { t } = useI18n();
 
     this.instance.interceptors.request.use(
       async (config: AxiosRequestConfig) => {
@@ -63,17 +66,17 @@ export default class {
 
     this.instance.interceptors.response.use(
       (response) => {
-        const { status, data } = response;
+        const { status } = response;
 
         // axiosCanceler.removePending(response.config);
 
         if (status === 200 || status < 300 || status === 304) {
-          if (data?.Status === 'Error') {
-            return handleServiceResult(data, null);
+          const error = handleResponseError(response);
+          if (error) {
+            return handleServiceResult(error, null);
           }
-          return handleServiceResult(null, data);
+          return handleServiceResult(null, response.data);
         }
-        handleResponseError(response);
         return handleServiceResult(null, response);
       },
       async (axiosError: AxiosError) => {
@@ -99,21 +102,25 @@ export default class {
                 }
                 case REFRESH_EXPIRED_CODE: {
                   (async () => {
-                    Object.assign(error, { message: 'RefreshToken 過期' });
+                    Object.assign(error, {
+                      message: t('sys.api.refreshTokenExpired')
+                    });
                     resetAuthStore(true);
                   })();
                   break;
                 }
                 case WITHOUT_TOKEN_CODE: {
                   (async () => {
-                    Object.assign(error, { message: 'Token 未帶入' });
+                    Object.assign(error, { message: t('sys.api.noToken') });
                     resetAuthStore(true);
                   })();
                   break;
                 }
-                case 'token is malformed': {
+                case TOKEN_ABNORMAL: {
                   (async () => {
-                    Object.assign(error, { message: 'Token 錯誤' });
+                    Object.assign(error, {
+                      message: t('sys.api.tokenAbnormal')
+                    });
                     resetAuthStore(true);
                   })();
                   break;
@@ -125,7 +132,7 @@ export default class {
 
         showMessage(error);
 
-        return handleServiceResult(error, null);
+        return handleServiceResult(axiosError.response?.data, null);
       }
     );
   }
