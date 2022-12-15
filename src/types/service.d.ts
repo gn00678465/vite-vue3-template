@@ -11,18 +11,7 @@ declare namespace Service {
 
   type SuccessResult<T> = [null, T];
 
-  type FailedResult = [RequestError, null];
+  type FailedResult = [ResponseError, null];
 
-  type RequestResult<T = any> = SuccessResult<T> | ErrorResult;
-
-  type CommonItem = {
-    ID: number;
-    Name: string;
-  };
-
-  interface CustomItem {
-    CustomerId: number;
-    Customer: string;
-    CRMUrl: string;
-  }
+  type RequestResult<T = any> = SuccessResult<T> | FailedResult;
 }

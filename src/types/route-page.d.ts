@@ -10,6 +10,7 @@ declare namespace RoutePage {
     | 'users_list-view'
     | 'application-form'
     | 'application-form_list-view'
+    | 'application-form_license-form'
     | 'dashboard'
     | 'dashboard_analysis'
     | 'error'

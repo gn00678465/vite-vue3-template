@@ -8,3 +8,21 @@ declare namespace ApiAuth {
 
   type UserInfo = Auth.UserInfo;
 }
+
+declare namespace ApiResponse {
+  type CommonItem = {
+    ID: number;
+    Name: string;
+  };
+
+  interface CustomItem {
+    CustomerId: number;
+    Customer: string;
+    CRMUrl: string;
+  }
+
+  interface TableData<T> {
+    Total: number;
+    Items: Array<T>;
+  }
+}
