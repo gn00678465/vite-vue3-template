@@ -1,15 +1,9 @@
 import type { Ref } from 'vue';
 
-interface Item {
-  ID: number;
-  Name: string;
-}
-export type List = Item[];
-
 import { fetchDepartmentList, fetchRoleList } from '@/service/api';
 
 export async function useFetchDepartmentList(
-  departmentList: Ref<List>
+  departmentList: Ref<ApiResponse.CommonItem[]>
 ): Promise<void> {
   const [err, data] = await fetchDepartmentList();
   if (data) {
@@ -20,7 +14,9 @@ export async function useFetchDepartmentList(
   }
 }
 
-export async function useFetchRoleList(roleList: Ref<List>): Promise<void> {
+export async function useFetchRoleList(
+  roleList: Ref<ApiResponse.CommonItem[]>
+): Promise<void> {
   const [err, data] = await fetchRoleList();
   if (data) {
     roleList.value = data;

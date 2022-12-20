@@ -10,6 +10,7 @@ export const useThemeStore = defineStore('theme-store', () => {
   const header = reactive({
     hight: 56
   });
+  const themeColor = ref<string>('#e9f0ff');
 
   const naiveTheme: ComputedRef<GlobalTheme | null> = computed(() => {
     return darkMode.value ? darkTheme : null;
@@ -19,5 +20,5 @@ export const useThemeStore = defineStore('theme-store', () => {
     darkMode.value = setMode;
   }
 
-  return { darkMode, naiveTheme, setDarkMode, tab, header };
+  return { darkMode, naiveTheme, setDarkMode, tab, header, themeColor };
 });

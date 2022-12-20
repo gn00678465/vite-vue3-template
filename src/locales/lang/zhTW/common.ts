@@ -8,5 +8,9 @@ export default {
   name: '使用者名字',
   department: '部門',
   role: '角色',
-  notSet: '未設定'
+  notSet: '未設定',
+  reject: '駁回',
+  revoke: '撤回',
+  approval: '核准',
+  submit: '送出'
 };

@@ -10,7 +10,8 @@ export enum EnumTypeof {
   regexp = '[object RegExp]',
   set = '[object Set]',
   map = '[object Map]',
-  file = '[object File]'
+  file = '[object File]',
+  date = '[object Date]'
 }
 
 export enum EnumContentType {

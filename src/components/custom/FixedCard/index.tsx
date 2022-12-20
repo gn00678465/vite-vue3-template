@@ -50,6 +50,7 @@ export default defineComponent({
             height: '100%'
           }
         }
+        {...props}
       >
         {props.fixed ? (
           <NScrollbar

@@ -20,6 +20,27 @@ const application: AuthRoute.Route = {
         icon: 'clarity:license-line',
         requiresAuth: true
       }
+    },
+    {
+      name: 'application-form_customer-list',
+      path: '/application-form/customer-list',
+      component: () => import('@/pages/application/CustomerList'),
+      meta: {
+        title: '客戶清單',
+        icon: 'clarity:license-line',
+        requiresAuth: true
+      }
+    },
+    {
+      name: 'application-form_license-form',
+      path: '/application-form/license-form/:id?',
+      component: () => import('@/pages/application/LicenseForm'),
+      meta: {
+        title: '建立申請單',
+        icon: 'clarity:license-line',
+        requiresAuth: true,
+        hide: true
+      }
     }
   ]
 };

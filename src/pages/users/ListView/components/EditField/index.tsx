@@ -1,7 +1,6 @@
-import { defineComponent, ref, Ref, computed, PropType, h } from 'vue';
+import { defineComponent, ref, Ref, computed, PropType } from 'vue';
 import { NSelect, SelectOption, NDivider } from 'naive-ui';
 import { Icon } from '@iconify/vue';
-import type { List } from '../../utils';
 import { useAuthStore } from '@/stores';
 import { useI18n, useNotification } from '@/hooks';
 
@@ -16,7 +15,7 @@ export default defineComponent({
       default: 0
     },
     options: {
-      type: Array as PropType<List>,
+      type: Array as PropType<ApiResponse.CommonItem[]>,
       default: () => []
     },
     currentUser: {

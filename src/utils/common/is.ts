@@ -1,4 +1,5 @@
 import { EnumTypeof } from '@/enum';
+import { isEmpty } from 'ramda';
 
 export function typeOf(assertions: string[]) {
   return (x: unknown) => {
@@ -54,3 +55,10 @@ export function isMap(x: unknown) {
 export function isFile(x: unknown) {
   return typeOf(EnumTypeof.file.split(','))(x);
 }
+
+export function isDate(x: unknown) {
+  return typeOf(EnumTypeof.date.split(','))(x);
+}
+
+export const isEmptyObj = (obj: unknown): boolean =>
+  isObject(obj) && isEmpty(obj);

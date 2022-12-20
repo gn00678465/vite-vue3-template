@@ -1,12 +1,13 @@
 import { defineComponent, Transition, KeepAlive } from 'vue';
 import type { ComputedRef, Component } from 'vue';
 import type { RouteLocationNormalized, RouteComponent } from 'vue-router';
-import { useAppStore } from '@/stores';
+import { useAppStore, useRouteStore } from '@/stores';
 
 export default defineComponent({
   name: 'GlobalContent',
   setup(props) {
-    const app = useAppStore();
+    const appStore = useAppStore();
+    const routeStore = useRouteStore();
 
     return () => (
       <router-view>
@@ -19,8 +20,8 @@ export default defineComponent({
             route: RouteLocationNormalized;
           }) => (
             <Transition name="fade-slide" mode="out-in" appear>
-              <KeepAlive>
-                {app.reloadFlag && <Component key={route.fullPath} />}
+              <KeepAlive include={routeStore.cacheRoutes}>
+                {appStore.reloadFlag && <Component key={route.fullPath} />}
               </KeepAlive>
             </Transition>
           )

@@ -10,6 +10,7 @@ import {
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { fetchesObj, FetchKeys } from './fetch';
 import { renderState, renderExpand } from './render';
+import { stateDefault, customerDefault } from './fetch';
 
 export type Types = keyof typeof EnumApplicationFormType;
 export type States = keyof typeof EnumApplicationFormState;
@@ -45,16 +46,18 @@ const stateFilterOptions = Object.entries(fetchesObj).map(([k, v]) => ({
 
 export function createColumns({
   renderIndex,
-  renderAction
+  renderAction,
+  customerFilterOptions
 }: {
   renderIndex: (index: number) => number;
   renderAction: (rowData: ApplicationTableData, index: number) => VNodeChild;
+  customerFilterOptions: Array<{ value: number; label: string }>;
 }): DataTableColumns<ApplicationTableData> {
   return [
-    {
-      type: 'expand',
-      renderExpand: renderExpand
-    },
+    // {
+    //   type: 'expand',
+    //   renderExpand: renderExpand
+    // },
     {
       title: '#',
       key: 'index',
@@ -65,16 +68,22 @@ export function createColumns({
       width: 60
     },
     {
+      title: 'ID',
+      key: 'ApplicationFormId',
+      align: 'center',
+      width: 60
+    },
+    {
       title: 'Sale',
       key: 'Sale'
     },
     {
       title: 'Customer',
-      key: 'Customer'
-    },
-    {
-      title: 'CRMUrl',
-      key: 'CRMUrl'
+      key: 'Customer',
+      filterMultiple: false,
+      filter: true,
+      filterOptionValue: customerDefault.value,
+      filterOptions: customerFilterOptions
     },
     {
       title: 'Type',
@@ -108,6 +117,7 @@ export function createColumns({
       render: renderState,
       filterMultiple: false,
       filter: true,
+      filterOptionValue: stateDefault.value,
       filterOptions: stateFilterOptions
     },
     {

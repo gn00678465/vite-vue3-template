@@ -7,3 +7,6 @@ export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
  * 字元 8 - 12
  */
 export const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,16}$/;
+
+/** 驗證 URL */
+export const URL_REGEX = /^http(s)?:\/\//;

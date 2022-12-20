@@ -23,6 +23,7 @@ export const useRouteStore = defineStore('route-store', () => {
   const routeHomeName: Ref<string> = ref(
     transformRoutePathToRouteName(import.meta.env.VITE_ROUTE_HOME_PATH)
   );
+  const cacheRoutes: Ref<string[]> = ref([]);
 
   function isValidConstRouteName(name: AuthRoute.RouteKey) {
     return (
@@ -53,6 +54,7 @@ export const useRouteStore = defineStore('route-store', () => {
     menus: menus,
     handleAuthRoutes,
     initAuthRoute,
-    isValidConstRouteName
+    isValidConstRouteName,
+    cacheRoutes
   };
 });

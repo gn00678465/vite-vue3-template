@@ -1,14 +1,17 @@
 export default {
+  app_title: '授權申請系統',
   azure_login: '使用 Azure 登入',
   profile: '個人資料',
   logout: '登出',
   question_for_logout: '是否要退出系統?',
   login_success: '登入成功!',
   login_success_message: '歡迎回來',
+  occur_error: '發生錯誤',
   api: {
     tokenExpired: 'AccessToken 過期',
     refreshTokenExpired: 'RefreshToken 過期',
     noToken: 'Token 未帶入',
+    tokenAbnormal: 'Token 異常',
     success: '成功',
     error: '錯誤',
     errMsg400: '錯誤的請求!',

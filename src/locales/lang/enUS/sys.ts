@@ -1,14 +1,17 @@
 export default {
+  app_title: 'License System',
   azure_login: 'Use Azure to login.',
   profile: 'Profile',
   logout: 'Logout',
   question_for_logout: 'Are you sure you want to log out?',
   login_success: 'Login success!',
   login_success_message: 'Welcome back',
+  occur_error: 'An error occurs.',
   api: {
     tokenExpired: 'AccessToken expired',
     refreshTokenExpired: 'RefreshToken expired',
     noToken: 'Token not exist',
+    tokenAbnormal: 'Token Abnormal',
     success: 'Success',
     error: 'Error',
     errMsg400: 'Bad Request!',

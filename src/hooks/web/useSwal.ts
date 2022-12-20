@@ -11,27 +11,27 @@ export function useSwal() {
     return swal.fire(omit(options, ['icon']));
   }
 
-  function successSwal(options: SweetAlertOptions) {
+  function createSuccessSwal(options: SweetAlertOptions) {
     return createSwal({ ...options }, { icon: 'success' });
   }
 
-  function errorSwal(options: SweetAlertOptions) {
+  function createErrorSwal(options: SweetAlertOptions) {
     return createSwal({ ...options }, { icon: 'error' });
   }
 
-  function infoSwal(options: SweetAlertOptions) {
+  function createInfoSwal(options: SweetAlertOptions) {
     return createSwal({ ...options }, { icon: 'info' });
   }
 
-  function warningSwal(options: SweetAlertOptions) {
+  function createWarningSwal(options: SweetAlertOptions) {
     return createSwal({ ...options }, { icon: 'warning' });
   }
 
   return {
     createSwal,
-    successSwal,
-    errorSwal,
-    infoSwal,
-    warningSwal
+    createSuccessSwal,
+    createErrorSwal,
+    createInfoSwal,
+    createWarningSwal
   };
 }

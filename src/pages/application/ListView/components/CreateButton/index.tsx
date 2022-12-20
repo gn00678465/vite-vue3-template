@@ -2,11 +2,6 @@ import { defineComponent } from 'vue';
 import { NButton, NDropdown } from 'naive-ui';
 import type { DropdownOption } from 'naive-ui';
 import { Icon } from '@iconify/vue';
-import {
-  useFetchTableData,
-  FetchParams,
-  useDataTableDefProps
-} from '@/composables/dataTable';
 import { Types } from '../../utils';
 
 export default defineComponent({

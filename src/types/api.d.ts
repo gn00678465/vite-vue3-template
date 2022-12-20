@@ -15,14 +15,25 @@ declare namespace ApiResponse {
     Name: string;
   };
 
+  interface UserItem {
+    UserId: string;
+    Name: string;
+    Department?: number;
+    Role?: number;
+  }
+
   interface CustomItem {
     CustomerId: number;
     Customer: string;
     CRMUrl: string;
   }
 
-  interface TableData<T> {
+  interface CommonData<T> {
     Total: number;
     Items: Array<T>;
+  }
+
+  interface Success {
+    Status: 'Success';
   }
 }

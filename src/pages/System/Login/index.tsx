@@ -7,6 +7,7 @@ import { NCard, NGradientText, NSwitch } from 'naive-ui';
 import { Icon } from '@iconify/vue';
 import { PwdLogin, OAuth } from './components';
 import SystemLogo from '@/components/common/SystemLogo.vue';
+import { useI18n } from '@/hooks';
 
 interface LoginModule {
   key: EnumType.LoginModuleKey;
@@ -24,6 +25,7 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const { title } = useAppInfo();
+    const { t } = useI18n();
 
     const theme = useThemeStore();
 
@@ -70,7 +72,7 @@ export default defineComponent({
                 <SystemLogo class="text-[70px]" />
               </div>
               <NGradientText type="primary" size={28}>
-                {title}
+                {t(title)}
               </NGradientText>
             </header>
             <main class="pt-6">

@@ -10,7 +10,6 @@ import {
   createColumns,
   useFetchDepartmentList,
   useFetchRoleList,
-  List,
   UserInfo
 } from './utils';
 import {
@@ -32,8 +31,8 @@ export default defineComponent({
   setup() {
     const total: Ref<number> = ref(0);
     const list: Ref<UserInfo[]> = ref([]);
-    const departmentList: Ref<List> = ref([]);
-    const roleList: Ref<List> = ref([]);
+    const departmentList: Ref<ApiResponse.CommonItem[]> = ref([]);
+    const roleList: Ref<ApiResponse.CommonItem[]> = ref([]);
 
     const { userInfo } = useAuthStore();
     const { createSuccessNotify, createErrorNotify } = useNotification({
@@ -56,7 +55,7 @@ export default defineComponent({
 
     async function fetchData({ currentPage, currentPageSize }: FetchParams) {
       loadingStart();
-      const [err, data] = await fetchUsersList(
+      const [err, data] = await fetchUsersList<UserInfo>(
         useAPTerm(currentPage, currentPageSize).value,
         currentPageSize
       );

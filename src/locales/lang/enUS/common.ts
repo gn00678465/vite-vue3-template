@@ -8,5 +8,9 @@ export default {
   name: 'User Name',
   department: 'Department',
   role: 'Role',
-  notSet: 'Not set'
+  notSet: 'Not set',
+  reject: 'Reject',
+  revoke: 'Revoke',
+  approval: 'Approval',
+  submit: 'Submit'
 };

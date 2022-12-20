@@ -64,6 +64,23 @@ export function fetchCustomerList<T>(from: number, size: number) {
 export function setCustomer<T, K>(data: T) {
   return request.post<K>('/api/web/applicationform-customer', data);
 }
+/** 修改客戶資料 */
+export function modCustomer<T, K>(data: T) {
+  return request.put<K>('/api/web/applicationform-customer/mod', data);
+}
+/** 移除客戶 */
+export function delCustomer<T>(customerId: number) {
+  return request.delete<T>(
+    `/api/web/applicationform-customer?customer_id=${customerId}`
+  );
+}
+
+// 取得單筆表單資料
+export function fetchSpecificApplicationForm<T>(formId: number) {
+  return request.get<T>(
+    `/api/web/applicationform-one/list?applicationform_id=${formId}`
+  );
+}
 
 // 申請表單
 /**

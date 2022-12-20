@@ -73,6 +73,7 @@ export default class {
         if (status === 200 || status < 300 || status === 304) {
           const error = handleResponseError(response);
           if (error) {
+            console.log(error);
             return handleServiceResult(error, null);
           }
           return handleServiceResult(null, response.data);

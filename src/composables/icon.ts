@@ -3,7 +3,7 @@ import SvgIcon from '@/components/custom/SvgIcon';
 
 interface IStyle {
   color?: string;
-  size?: string;
+  fontSize?: string;
 }
 
 interface IConfig extends IStyle {
@@ -11,13 +11,13 @@ interface IConfig extends IStyle {
 }
 
 export function useRenderIcon(config: IConfig) {
-  const { color, size, icon } = config;
+  const { color, fontSize, icon } = config;
   const style: IStyle = {};
   if (color) {
     style.color = color;
   }
-  if (size) {
-    style.size = size;
+  if (fontSize) {
+    style.fontSize = fontSize;
   }
   if (!icon) {
     window.Error('未傳入 icon 值');

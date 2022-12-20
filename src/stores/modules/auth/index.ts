@@ -67,6 +67,7 @@ const useAuthStore = defineStore('auth-store', {
      * @param accessToken Azure AccessToken
      */
     async handleAfterLogin(accessToken: string) {
+      this.loginLoading = true;
       const { toLoginDirective } = useRouterPush(false);
       const store = useRouteStore();
       const { t } = useI18n();
@@ -79,16 +80,17 @@ const useAuthStore = defineStore('auth-store', {
         toLoginDirective();
 
         if (store.isInitAuthRoute) {
-          window.$swalDialog.success({
-            toast: true,
-            position: 'top-end',
-            timer: 3000,
+          window.$notify.success({
+            duration: 3000,
             title: t('sys.login_success'),
-            text: `${t('sys.login_success_message')} ${this.userInfo.Username}`,
-            showConfirmButton: false
+            content: `${t('sys.login_success_message')} ${
+              this.userInfo.Username
+            }`
           });
         }
       }
+
+      this.loginLoading = false;
     },
     /**
      * 清除登入相關資料
