@@ -7,8 +7,8 @@ const serviceEnv = {
     url: 'http://localhost:8080',
     urlPattern: '/api'
   }
-}
+};
 
 export function getServiceEnvConfig(mode: string) {
-  return serviceEnv[mode]
+  return serviceEnv[mode];
 }
