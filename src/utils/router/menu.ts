@@ -42,7 +42,9 @@ export function transformToMenu(routes: AuthRoute.Route[]): GlobalMenuOption[] {
       children: menuChildren
     });
 
-    menus.push(menuItem);
+    if (!hideInMenu(route)) {
+      menus.push(menuItem);
+    }
   });
   return menus;
 }

@@ -1,5 +1,9 @@
 import { useRenderIcon } from '@/composables';
-import type { RouteLocationMatched } from 'vue-router';
+import type { RouteLocationMatched, RouteRecordRaw } from 'vue-router';
+
+function filterHideMenu(menu: RouteRecordRaw): boolean {
+  return !menu.meta?.hide;
+}
 
 export function getBreadcrumbsByRouteMatched(
   activeRoute: string,
@@ -24,13 +28,15 @@ export function transformToBreadcrumb(
   if (menu.meta.icon) {
     breadcrumb.icon = useRenderIcon({
       icon: menu.meta.icon as string,
-      size: '16'
+      fontSize: '16px'
     });
   }
   if (menu.children && !!menu.children.length) {
-    breadcrumb.children = menu.children.map((subMenu) =>
-      transformToBreadcrumb(activeRoute, subMenu as RouteLocationMatched)
-    );
+    breadcrumb.children = menu.children
+      .filter(filterHideMenu)
+      .map((subMenu) =>
+        transformToBreadcrumb(activeRoute, subMenu as RouteLocationMatched)
+      );
   }
   return breadcrumb;
 }
