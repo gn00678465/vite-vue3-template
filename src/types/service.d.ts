@@ -4,8 +4,13 @@ declare namespace Service {
     message: string;
   }
 
+  interface ResponseSuccess<T = any> {
+    Status: 'Success';
+    data?: T;
+  }
+
   interface ResponseError {
-    Status: string;
+    Status: 'Error';
     Message: string;
   }
 

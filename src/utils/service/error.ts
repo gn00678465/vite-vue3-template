@@ -9,7 +9,7 @@ import {
   ERROR_STATUS_CODE
 } from '@/config';
 import { execStrategyActions } from '../common';
-import { useAuthStore } from '@/stores';
+import { useI18n, useNotification } from '@/hooks';
 
 type ErrorStatusCode = keyof typeof ERROR_STATUS_CODE;
 
@@ -58,7 +58,13 @@ export function handleNetworkError(axiosErr: AxiosError) {
 export function handleResponseError(
   response: AxiosResponse
 ): Service.ResponseError | null {
+  const { t } = useI18n();
+  const { createErrorNotify } = useNotification({ duration: 1500 });
   if (response.data?.Status === 'Error') {
+    createErrorNotify({
+      title: t('sys.occur_error'),
+      content: t(`sys.api.${response.data.Message}`)
+    });
     return response.data;
   }
   return null;

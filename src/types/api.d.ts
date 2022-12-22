@@ -16,7 +16,7 @@ declare namespace ApiResponse {
   };
 
   interface UserItem {
-    UserId: string;
+    UserId: number;
     Name: string;
     Department?: number;
     Role?: number;
@@ -31,9 +31,5 @@ declare namespace ApiResponse {
   interface CommonData<T> {
     Total: number;
     Items: Array<T>;
-  }
-
-  interface Success {
-    Status: 'Success';
   }
 }
