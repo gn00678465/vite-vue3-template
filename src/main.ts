@@ -4,6 +4,7 @@ import { setupStore } from './stores';
 import './style/index.css';
 // import './style.css';
 import App from './App.vue';
+import '@purge-icons/generated';
 
 import { msalInstance, msalPlugin, setupI18n } from './plugins';
 
