@@ -13,7 +13,7 @@ export default defineComponent({
   setup(props) {
     return () => (
       <>
-        <GlobalLogo class="h-[56px] border-b border-dashed" />
+        <GlobalLogo class="h-[56px] border-b border-dashed dark:border-[#101014]" />
         <VerticalMenu collapsedWidth={props.collapsedWidth}></VerticalMenu>
       </>
     );

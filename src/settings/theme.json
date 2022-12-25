@@ -1,0 +1,9 @@
+{
+  "themeColor": "#1679e1",
+  "otherColor": {
+    "info": "#3296f6",
+    "success": "#01a453",
+    "warning": "#ffc32d",
+    "error": "#ee5a4e"
+  }
+}

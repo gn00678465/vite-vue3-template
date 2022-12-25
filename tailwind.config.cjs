@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       boxShadow: {
@@ -8,7 +9,8 @@ module.exports = {
         tab: '0 1px 2px rgba(0,21,41,0.08)'
       },
       colors: {
-        windows: '#0178d4'
+        windows: '#0178d4',
+        primary: 'var(--primary-color)'
       }
     }
   },

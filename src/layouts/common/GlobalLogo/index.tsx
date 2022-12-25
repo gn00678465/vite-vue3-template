@@ -22,7 +22,7 @@ export default defineComponent({
     });
     return () => (
       <router-link
-        to="/login"
+        to={{ name: 'root' }}
         class="flex items-center justify-center whitespace-nowrap overflow-hidden"
       >
         <SystemLogo class="text-[24px]" />

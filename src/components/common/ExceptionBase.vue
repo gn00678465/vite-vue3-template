@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex flex-col justify-center items-center">
-    <div class="text-[400px]">
+    <div class="text-[400px] text-primary">
       <icon-custom-no-permission v-if="props.type === 403" />
       <icon-custom-not-found v-else-if="props.type === 404" />
       <icon-custom-service-error v-else-if="props.type === 500" />

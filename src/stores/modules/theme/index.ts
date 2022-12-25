@@ -3,6 +3,8 @@ import type { Ref, ComputedRef } from 'vue';
 import { defineStore } from 'pinia';
 import { darkTheme } from 'naive-ui';
 import type { GlobalTheme } from 'naive-ui';
+import { getNaiveThemeOverrides } from './helpers';
+import { themeSetting } from '@/settings';
 
 export const useThemeStore = defineStore('theme-store', () => {
   const darkMode: Ref<boolean> = ref(false);
@@ -10,7 +12,7 @@ export const useThemeStore = defineStore('theme-store', () => {
   const header = reactive({
     hight: 56
   });
-  const themeColor = ref<string>('#e9f0ff');
+  const themeColor = ref<string>(themeSetting.themeColor);
 
   const naiveTheme: ComputedRef<GlobalTheme | null> = computed(() => {
     return darkMode.value ? darkTheme : null;
@@ -20,5 +22,20 @@ export const useThemeStore = defineStore('theme-store', () => {
     darkMode.value = setMode;
   }
 
-  return { darkMode, naiveTheme, setDarkMode, tab, header, themeColor };
+  const naiveThemeOverrides = computed(() => {
+    return getNaiveThemeOverrides({
+      primary: themeColor.value,
+      ...themeSetting.otherColor
+    });
+  });
+
+  return {
+    darkMode,
+    naiveTheme,
+    setDarkMode,
+    tab,
+    header,
+    themeColor,
+    naiveThemeOverrides
+  };
 });

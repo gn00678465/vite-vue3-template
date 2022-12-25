@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import NaiveUIProvider from './components/common/NaiveUIProvider.vue';
+import { subscribeThemeStore } from './stores';
+
+subscribeThemeStore();
 </script>
 
 <template>

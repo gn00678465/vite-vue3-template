@@ -25,7 +25,8 @@ export default defineComponent({
             <ActiveComponent.value
               key={item.fullPath}
               isActive={tab.activeTab === item.fullPath}
-              // primary-color={theme.themeColor}
+              primary-color={theme.themeColor}
+              dark-mode={theme.darkMode}
               closable={!(item.name === tab.homeTab.name)}
               onClick={() => tab.handleClickTab(item.fullPath)}
               onClose={() => tab.removeTab(item.fullPath)}

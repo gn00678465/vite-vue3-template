@@ -11,3 +11,4 @@ export function setupStore(app: App): void {
 }
 
 export * from './modules';
+export * from './subscribe';

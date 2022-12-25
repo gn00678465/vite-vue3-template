@@ -110,7 +110,7 @@ useContentProvide(contentHeight as ComputedRef<number>);
           <NLayoutHeader
             v-if="slots.header"
             ref="headerRef"
-            class="bg-white h-[56px]"
+            class="h-[56px]"
             :inverted="props.inverted"
           >
             <slot name="header" />
@@ -130,9 +130,7 @@ useContentProvide(contentHeight as ComputedRef<number>);
                 ]"
               >
                 <NLayoutContent class="bg-transparent">
-                  <div class="mx-4 my-2">
-                    <slot name="content" />
-                  </div>
+                  <slot name="content" />
                 </NLayoutContent>
               </NLayout>
             </NLayout>
