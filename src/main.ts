@@ -12,18 +12,15 @@ import { msalInstance, msalPlugin, setupI18n } from './plugins';
 async function setupApp() {
   // app loading
   const appLoading = createApp(AppLoading);
-
+  setupI18n(appLoading);
   appLoading.mount('#appLoading');
 
+  // main
   const app = createApp(App);
   setupStore(app);
-
   app.use(msalPlugin, msalInstance);
-
   setupI18n(app);
-
   await setupRouter(app);
-
   app.mount('#app');
 }
 

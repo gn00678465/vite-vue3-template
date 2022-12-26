@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useAppInfo } from '@/composables';
 import { localStorage } from '@/utils';
+import { useI18n } from '@/hooks';
 
+const { t } = useI18n();
 const { title } = useAppInfo();
 
 const loadingClasses = [
@@ -36,7 +38,7 @@ addThemeColorCssVars();
         ></div>
       </div>
     </div>
-    <h2 class="text-[28px] font-500 text-[#646464]">{{ title }}</h2>
+    <h2 class="text-[28px] font-500 text-[#646464]">{{ t(title) }}</h2>
   </div>
 </template>
 

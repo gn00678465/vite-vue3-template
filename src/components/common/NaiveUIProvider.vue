@@ -29,6 +29,7 @@ import {
   useLoadingBar,
   useNotification
 } from 'naive-ui';
+import { useGlobalEvents } from '@/composables';
 import { useThemeStore } from '@/stores';
 import { useI18n } from 'vue-i18n';
 
@@ -52,6 +53,8 @@ const getNaiveDateLocale = computed(() => {
       return dateZhTW;
   }
 });
+
+useGlobalEvents();
 
 const NaiveContentProvider = defineComponent({
   name: 'NaiveContentProvider',

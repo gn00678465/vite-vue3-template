@@ -128,10 +128,12 @@ useContentProvide(contentHeight as ComputedRef<number>);
                   props.showTab && 'content',
                   props.showFooter && 'footer'
                 ]"
+                :content-style="{
+                  minHeight: '100%',
+                  height: 'auto'
+                }"
               >
-                <NLayoutContent class="bg-transparent">
-                  <slot name="content" />
-                </NLayoutContent>
+                <slot name="content" />
               </NLayout>
             </NLayout>
           </NLayout>

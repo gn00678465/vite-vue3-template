@@ -64,7 +64,7 @@ const options = computed<DropdownOption[]>(() => [
 <template>
   <NDropdown :options="options">
     <HoverContainer class="flex items-center gap-x-2 px-3">
-      <icon-custom-users class="text-2xl" />
+      <icon-custom-users class="text-2xl text-black dark:text-[#e6e6e6]" />
       <span class="font-medium text-base">{{ userInfo.Username }}</span>
     </HoverContainer>
   </NDropdown>
