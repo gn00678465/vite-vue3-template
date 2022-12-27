@@ -22,6 +22,6 @@ export default function (viteEnv, srcPath: string) {
       content: ['**/*.html', '**/*.js', '**/*.vue', '**/*.jsx', '**/*.tsx'],
       format: 'mjs'
     }),
-    vitestConfig
+    vitestConfig(srcPath)
   ];
 }
