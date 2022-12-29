@@ -4,7 +4,7 @@ const application: AuthRoute.Route = {
   name: 'application-form',
   path: '/application',
   component: getLayoutComponent('basic'),
-  redirectPath: '/application-form/list-view',
+  redirect: '/application-form/list-view',
   meta: {
     title: '表單申請',
     icon: 'fluent:form-new-20-regular',
@@ -18,7 +18,8 @@ const application: AuthRoute.Route = {
       meta: {
         title: '申請單列表',
         icon: 'clarity:license-line',
-        requiresAuth: true
+        requiresAuth: true,
+        keepAlive: true
       }
     },
     {
@@ -28,15 +29,51 @@ const application: AuthRoute.Route = {
       meta: {
         title: '客戶清單',
         icon: 'clarity:license-line',
-        requiresAuth: true
+        requiresAuth: true,
+        keepAlive: true
       }
     },
     {
-      name: 'application-form_license-form',
-      path: '/application-form/license-form/:id?',
+      name: 'application-form_formal',
+      path: '/application-form/formal/:id?',
       component: () => import('@/pages/application/LicenseForm'),
+      props: (route) => ({
+        formType: 'Formal',
+        formId: route.params.id
+      }),
       meta: {
-        title: '建立申請單',
+        title: '正式申請單',
+        icon: 'clarity:license-line',
+        requiresAuth: true,
+        hide: true
+      }
+    },
+    {
+      name: 'application-form_poc',
+      path: '/application-form/poc/:id?',
+      component: () => import('@/pages/application/LicenseForm'),
+      props: (route) => ({
+        formType: 'POC',
+        formId: route.params.id
+      }),
+      meta: {
+        title: 'POC 申請單',
+        icon: 'clarity:license-line',
+        requiresAuth: true,
+        hide: true
+      }
+    },
+    {
+      name: 'application-form_functional-module',
+      path: '/application-form/functional-module/:id?',
+      component: () => import('@/pages/application/LicenseForm'),
+      props: (route) => ({
+        formType: 'FunctionModule',
+        formId: route.params.id,
+        formalId: route.query.formalId
+      }),
+      meta: {
+        title: '功能模組申請單',
         icon: 'clarity:license-line',
         requiresAuth: true,
         hide: true

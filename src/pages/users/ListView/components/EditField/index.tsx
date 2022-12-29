@@ -3,6 +3,7 @@ import { NSelect, SelectOption, NDivider } from 'naive-ui';
 import { Icon } from '@iconify/vue';
 import { useAuthStore } from '@/stores';
 import { useI18n, useNotification } from '@/hooks';
+import { messages } from '../../../locales';
 
 type Column = '' | 'Role' | 'Department';
 
@@ -34,6 +35,7 @@ export default defineComponent({
       ref(undefined);
 
     const { t } = useI18n();
+    const { t: tl } = useI18n({ messages });
     const { createErrorNotify } = useNotification({
       duration: 1500
     });
@@ -54,7 +56,7 @@ export default defineComponent({
       notSet,
       ...props.options.map((item) => {
         return {
-          label: item.Name,
+          label: tl(`${props.column}.${item.Name}`),
           value: item.ID
         };
       })
@@ -93,7 +95,8 @@ export default defineComponent({
       <div>
         {!isEdit.value ? (
           <div class="flex w-full items-center justify-between">
-            {label.value || t('common.notSet')}
+            {(label.value && tl(`${props.column}.${label.value}`)) ||
+              t('common.notSet')}
             {enableEdit.value && (
               <Icon
                 class="cursor-pointer text-base opacity-70 transition-all hover:text-blue-500 hover:opacity-100"

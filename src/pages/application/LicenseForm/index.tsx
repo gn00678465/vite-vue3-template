@@ -3,13 +3,14 @@ import {
   computed,
   reactive,
   onBeforeMount,
-  ComputedRef,
   ref,
+  toRefs,
   Ref,
   watchEffect
 } from 'vue';
-import { pipe, pick, assoc, omit } from 'ramda';
+import { pipe, pick, assoc, omit, prop } from 'ramda';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useMachine } from '@xstate/vue';
 import { NForm, NSelect, NButton, NGrid, NFormItemGi } from 'naive-ui';
 import FixedCard from '@/components/custom/FixedCard';
 import {
@@ -17,7 +18,9 @@ import {
   SignOffRecord,
   ModuleList,
   UploadAttachment,
-  SignOffState
+  SignOffState,
+  HeaderWrap,
+  SerialNumber
 } from './components';
 import type { FormInst, FormValidationError } from 'naive-ui';
 import { useAuthStore, useApiStore, useTabStore } from '@/stores';
@@ -27,32 +30,47 @@ import {
   renderPerSeat,
   rules,
   FormValue,
-  omitFormal,
-  omitPOC,
   includeImage,
-  OmitPOC,
-  OmitFormal,
-  UploadImage,
-  SuccessResponse,
-  ResponseData
+  ResponseData,
+  initStateMachine,
+  SIGN_OFF_STATES,
+  omitPOC,
+  ApplyModule
 } from './utils';
-import { useI18n } from '@/hooks';
+import { useI18n, useNotification, useSwal, useLoading } from '@/hooks';
 import { execStrategyActions } from '@/utils';
-import {
-  postApplicationPOC,
-  postApplicationFormal,
-  uploadApplicationImage,
-  fetchSpecificApplicationForm
-} from '@/service/api';
+import { fetchSpecificApplicationForm } from '@/service/api';
+import { messages } from '../locales';
 
 export default defineComponent({
   name: 'LicenseForm',
-  setup() {
+  props: {
+    formType: {
+      type: String,
+      default: ''
+    },
+    formId: {
+      type: String,
+      default: undefined
+    },
+    formalId: {
+      type: String,
+      default: undefined
+    }
+  },
+  setup(props) {
     const route = useRoute();
     const auth = useAuthStore();
     const apiStore = useApiStore();
     const { removeTab } = useTabStore();
     const { t } = useI18n();
+    const { t: tl } = useI18n({ messages });
+    const { state, send } = useMachine(initStateMachine);
+    const { createErrorNotify, createSuccessNotify } = useNotification({
+      duration: 1500
+    });
+    const { createWarningSwal } = useSwal();
+    const { loading, loadingStart, loadingEnd } = useLoading(false);
 
     const formRef: Ref<FormInst | null> = ref(null);
     const formState: Ref<string> = ref('');
@@ -67,10 +85,38 @@ export default defineComponent({
       Images: ''
     });
 
-    const formId = computed(() => route.params.id) as ComputedRef<string>;
-    const formType = computed(() => route.query.type) as ComputedRef<string>;
-    const isCreate = computed(() => !formId.value);
+    const { formType, formId, formalId } = toRefs(props);
     const needUpload = computed(() => includeImage(formValue));
+    const creator = computed(
+      () =>
+        apiStore.userListMap.get(formValue.SaleId as number)?.Name ||
+        '申請人不存在'
+    );
+
+    const isCreate = computed(() => state.value.matches('Create'));
+    const isSelf = computed(() => formValue.SaleId === auth.userInfo.UserId);
+    // type
+    const isFormal = computed(() => formType.value === 'Formal');
+    const isPOC = computed(() => formType.value === 'POC');
+    const isModule = computed(() => formType.value === 'FunctionModule');
+    // state
+    const isDone = computed(() => state.value.done);
+    const isApproval = computed(
+      () =>
+        !isCreate.value &&
+        (state.value.matches(SIGN_OFF_STATES.ManagerCheck) ||
+          state.value.matches(SIGN_OFF_STATES.FinalCheck))
+    );
+    const isSerialNumber = computed(() =>
+      state.value.matches(SIGN_OFF_STATES.Finish_WaitingForSerial)
+    );
+    const canRevoke = computed(
+      () => isApproval.value && (isSelf.value || auth.isAdmin)
+    );
+
+    // 不在 formValue 內的資料
+    const extraFormData = reactive({});
+    const functionalModule = ref<ApplyModule[]>([]);
 
     onBeforeMount(() => {
       apiStore.fetchList('moduleList');
@@ -78,13 +124,28 @@ export default defineComponent({
       apiStore.fetchUsers();
     });
 
-    onBeforeRouteUpdate(async (to, from) => {
-      console.log('to', to);
-      console.log('from', from);
+    onBeforeRouteUpdate((to, from) => {
+      if (to !== from) return false;
+      if (to.params.type !== from.params.type) return false;
     });
 
     watchEffect(() => {
-      fetchFormValue(formId.value);
+      formId?.value && fetchFormValue(parseInt(formId.value));
+    });
+
+    watchEffect(
+      () => {
+        !isDone.value &&
+          send({
+            type: 'UPDATE_CONTEXT',
+            value: { state: formState.value }
+          });
+      },
+      { flush: 'post' }
+    );
+
+    watchEffect(() => {
+      formalId?.value && fetchFormValue(parseInt(formalId.value));
     });
 
     const customerOptions = computed(() => {
@@ -97,45 +158,30 @@ export default defineComponent({
     });
 
     const userOptions = computed(() => {
-      return apiStore.userList.map((item: ApiResponse.UserItem) => {
-        return {
-          value: item.UserId,
-          label: item.Name
-        };
-      });
+      return apiStore.userList
+        .filter((item) => {
+          return item.Department === 1 || item.Department === 2;
+        })
+        .map((item: ApiResponse.UserItem) => {
+          return {
+            value: item.UserId,
+            label: item.Name
+          };
+        });
     });
 
-    async function handleSubmitFormal(formValue: FormValue) {
-      const param = omitFormal(formValue);
-      const res = await postApplicationFormal<
-        OmitFormal<FormValue>,
-        SuccessResponse
-      >(param);
-      return res;
+    function showMessage(
+      title?: string
+    ): (arg: Service.ResponseSuccess | Service.ResponseError) => void {
+      return (res) => {
+        res.Status === 'Error'
+          ? createErrorNotify({ title: '發生錯誤', description: res.Message })
+          : createSuccessNotify({ title });
+      };
     }
 
-    async function handleSubmitPOC(formValue: FormValue) {
-      const param = omitPOC(formValue);
-      const res = await postApplicationPOC<OmitPOC<FormValue>, SuccessResponse>(
-        param
-      );
-      return res;
-    }
-
-    async function handleSubmitPOCWithImage(formValue: FormValue) {
-      const [err, data] = await handleSubmitPOC(formValue);
-      if (data) {
-        const { ApplicationformId } = data;
-        const param = pipe(
-          pick(['Images']),
-          assoc('ApplicationformId', ApplicationformId)
-        )(formValue);
-        const res = await uploadApplicationImage<UploadImage, SuccessResponse>(
-          param as UploadImage
-        );
-        return res;
-      }
-      return [err, data];
+    function handleCancel() {
+      removeTab(route.fullPath);
     }
 
     function handleSubmit(e: MouseEvent) {
@@ -144,31 +190,51 @@ export default defineComponent({
         if (!errors) {
           const actions: Common.StrategyActions = [
             [
-              formType.value === 'Formal',
-              async () => {
-                const [err, data] = await handleSubmitFormal(formValue);
-                if (data) {
-                  removeTab(route.fullPath);
-                }
+              isFormal.value,
+              () => {
+                send({
+                  type: 'SubmitFormal',
+                  param: formValue,
+                  actions: {
+                    close: handleCancel
+                  }
+                });
               }
             ],
             [
-              formType.value === 'POC' && !needUpload.value,
-              async () => {
-                //
-                const [err, data] = await handleSubmitPOC(formValue);
-                if (data) {
-                  removeTab(route.fullPath);
-                }
+              isPOC.value && !needUpload.value,
+              () => {
+                send({
+                  type: 'SubmitPOC',
+                  param: omitPOC(formValue),
+                  actions: {
+                    close: handleCancel
+                  }
+                });
               }
             ],
             [
-              formType.value === 'POC' && needUpload.value,
-              async () => {
-                const [err, data] = await handleSubmitPOCWithImage(formValue);
-                if (data) {
-                  removeTab(route.fullPath);
-                }
+              isPOC.value && needUpload.value,
+              () => {
+                send({
+                  type: 'SubmitPOC',
+                  param: formValue,
+                  actions: {
+                    close: handleCancel
+                  }
+                });
+              }
+            ],
+            [
+              isModule.value,
+              () => {
+                send({
+                  type: 'SubmitModule',
+                  param: formValue,
+                  actions: {
+                    close: handleCancel
+                  }
+                });
               }
             ]
           ];
@@ -177,21 +243,89 @@ export default defineComponent({
       });
     }
 
-    function handleCancel() {
-      removeTab(route.fullPath);
+    function handleRevoke() {
+      createWarningSwal({
+        title: '撤回此申請單?',
+        showCancelButton: true,
+        confirmButtonText: '確定',
+        cancelButtonText: '取消'
+      }).then(({ isConfirmed }) => {
+        if (isConfirmed) {
+          send({
+            type: 'Cancel',
+            param: parseInt(formId.value as string),
+            actions: {
+              close: handleCancel,
+              showMessage: showMessage('已撤回表單!')
+            }
+          });
+        }
+      });
     }
 
-    async function fetchFormValue(id: string) {
+    function handleApproval() {
+      send({
+        type: 'Next',
+        param: parseInt(formId.value as string),
+        actions: { close: handleCancel }
+      });
+    }
+
+    function handleReject(comment: string) {
+      send({
+        type: 'Reject',
+        param: pipe(
+          assoc('ApplicationformId', parseInt(formId.value as string)),
+          assoc('Reason', comment)
+        )({}),
+        actions: {
+          close: handleCancel,
+          showMessage: showMessage('已駁回表單!')
+        }
+      });
+    }
+
+    function handleGenerateSN() {
+      send({
+        type: 'Next',
+        param: parseInt(formId.value as string),
+        actions: { close: handleCancel }
+      });
+    }
+
+    async function fetchFormValue(id: number) {
       if (!id) return;
-      const [err, data] = await fetchSpecificApplicationForm<ResponseData>(
-        parseInt(id)
-      );
+      loadingStart();
+      const [err, data] = await fetchSpecificApplicationForm<ResponseData>(id);
       if (data) {
-        handleResponse(data);
+        const actions: Common.StrategyActions = [
+          [
+            !isModule.value || !formalId?.value,
+            () => {
+              handleAllResponse(data);
+              Object.assign(
+                extraFormData,
+                omit(Object.keys(formValue))(data.Items)
+              );
+            }
+          ],
+          [
+            isModule.value && !!formalId?.value,
+            () => {
+              handleSomeResponse(data);
+            }
+          ]
+        ];
+
+        execStrategyActions(actions);
       }
+      if (err) {
+        handleCancel();
+      }
+      loadingEnd();
     }
 
-    function handleResponse(result: ResponseData) {
+    function handleAllResponse(result: ResponseData) {
       const res = pipe(
         pick(Object.keys(formValue)),
         omit(['Images'])
@@ -203,6 +337,12 @@ export default defineComponent({
       formState.value = result.Items.State;
     }
 
+    function handleSomeResponse(result: ResponseData) {
+      const res = pipe(pick(['CustomerId']), omit(['Images']))(result.Items);
+      Object.assign(formValue, res);
+      functionalModule.value = prop('ApplyModule')(result.Items);
+    }
+
     return () => (
       <FixedCard fixed={false}>
         {{
@@ -211,33 +351,30 @@ export default defineComponent({
               <NForm
                 disabled={!isCreate.value}
                 ref={formRef}
-                class="flex flex-col gap-y-6"
+                class="flex flex-col"
                 model={formValue}
                 rules={rules}
                 label-width="auto"
               >
                 <h3 class="text-3xl font-semibold text-center mt-5">
-                  {formType.value}申請單
+                  {tl(formType.value)}申請單
                 </h3>
                 {/* basic */}
-                <div class="p-3 relative border rounded-sm mt-6">
-                  <p class="absolute top-[-30px] left-[-1px] px-2 py-1 bg-blue-200">
-                    申請單狀態
-                  </p>
-                  <SignOffState state={formState.value}>
-                    {{
-                      actions: () => (
-                        <NButton round type="error">
-                          {t('common.revoke')}
-                        </NButton>
-                      )
-                    }}
-                  </SignOffState>
-                </div>
-                <div class="px-3 pt-5 relative border rounded-sm mt-6">
-                  <p class="absolute top-[-30px] left-[-1px] px-2 py-1 bg-blue-200">
-                    申請資訊
-                  </p>
+                {!isCreate.value && (
+                  <HeaderWrap title="申請單狀態">
+                    <SignOffState state={formState.value}>
+                      {{
+                        actions: () =>
+                          canRevoke.value && (
+                            <NButton round type="error" onClick={handleRevoke}>
+                              {t('common.revoke')}
+                            </NButton>
+                          )
+                      }}
+                    </SignOffState>
+                  </HeaderWrap>
+                )}
+                <HeaderWrap title="申請資訊">
                   <NGrid cols="2" x-gap={8}>
                     <NFormItemGi path="SaleId" label="申請人">
                       {auth.isAdmin ? (
@@ -251,7 +388,7 @@ export default defineComponent({
                           }}
                         ></NSelect>
                       ) : (
-                        auth.userInfo.Username
+                        creator.value
                       )}
                     </NFormItemGi>
                     <NFormItemGi path="CustomerId" label="客戶名稱">
@@ -259,19 +396,19 @@ export default defineComponent({
                         options={customerOptions.value}
                         placeholder="選擇客戶"
                         filterable
-                        tag
                         value={formValue.CustomerId}
+                        disabled={!isCreate.value || isModule.value}
                         on-update:value={(value: number) => {
                           formValue.CustomerId = value;
                         }}
                       ></NSelect>
                     </NFormItemGi>
-                    {formType.value === 'Formal' && (
+                    {isFormal.value && (
                       <NFormItemGi label="授權到期時間" path="ExpiredDate">
                         {renderExpiredDate(formValue)}
                       </NFormItemGi>
                     )}
-                    {formType.value === 'POC' && (
+                    {(isPOC.value || isModule.value) && (
                       <>
                         <NFormItemGi label="測試天數" path="TestDays">
                           {renderTestDays(formValue)}
@@ -287,21 +424,26 @@ export default defineComponent({
                     list={apiStore.moduleList}
                     value={formValue.ApplyModule}
                     defaultExpiredDate={formValue.ExpiredDate}
+                    disabledModule={functionalModule.value}
                     onUpdate:value={(value) => {
                       formValue.ApplyModule = value;
                     }}
                   ></ModuleList>
-                </div>
+                </HeaderWrap>
                 {/* upload */}
                 {needUpload.value && (
-                  <UploadAttachment
-                    class="mt-6"
-                    value={formValue.Images}
-                    defaultValue={formValue.Images}
-                    onUpdate:value={(images) => {
-                      formValue.Images = images;
-                    }}
-                  ></UploadAttachment>
+                  <HeaderWrap
+                    title="上傳附件"
+                    describe="測試天數大於45天或測試用量大於30天，必須掃描並上傳申請單。"
+                  >
+                    <UploadAttachment
+                      value={formValue.Images}
+                      defaultValue={formValue.Images}
+                      onUpdate:value={(images: string) => {
+                        formValue.Images = images;
+                      }}
+                    ></UploadAttachment>
+                  </HeaderWrap>
                 )}
                 {isCreate.value && (
                   <div class="flex items-center justify-around">
@@ -314,8 +456,36 @@ export default defineComponent({
                   </div>
                 )}
               </NForm>
-              {!isCreate.value && <SignOffComment />}
-              {!isCreate.value && <SignOffRecord />}
+              {isApproval.value && (
+                <HeaderWrap title="簽核">
+                  <SignOffComment
+                    onApproval={handleApproval}
+                    onReject={handleReject}
+                    onCancel={handleCancel}
+                  />
+                </HeaderWrap>
+              )}
+              {(isSerialNumber.value || isDone.value) && (
+                <HeaderWrap title="序號">
+                  {{
+                    default: () => <SerialNumber></SerialNumber>,
+                    extra: () => (
+                      <NButton
+                        size="small"
+                        type="primary"
+                        onClick={handleGenerateSN}
+                      >
+                        產生序號
+                      </NButton>
+                    )
+                  }}
+                </HeaderWrap>
+              )}
+              {!isCreate.value && (
+                <HeaderWrap title="簽核紀錄">
+                  <SignOffRecord creator={creator.value} {...extraFormData} />
+                </HeaderWrap>
+              )}
             </div>
           )
         }}

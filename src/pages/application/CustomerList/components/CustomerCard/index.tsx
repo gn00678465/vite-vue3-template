@@ -5,6 +5,7 @@ import {
   reactive,
   PropType,
   ref,
+  toRefs,
   Ref
 } from 'vue';
 import {
@@ -43,10 +44,11 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const auth = useAuthStore();
+    const { value } = toRefs(props);
     const { createErrorSwal } = useSwal();
 
     const formValue = reactive(
-      Object.assign({ Customer: '', CustomerId: 0, CRMUrl: '' }, props.value)
+      Object.assign({ Customer: '', CustomerId: 0, CRMUrl: '' }, value.value)
     );
     const isNew = ref(!formValue.CustomerId);
     const isEdit = ref(isNew.value);
@@ -128,7 +130,7 @@ export default defineComponent({
               if (!error) {
                 const [err, data] = await modCustomer<
                   Omit<Customer, '_loading'>,
-                  ApiResponse.Success
+                  Service.ResponseSuccess
                 >(formValue);
                 if (data) {
                   emit('update:value', formValue);
@@ -152,7 +154,7 @@ export default defineComponent({
           type === 'cancel' && !isNew.value,
           () => {
             isEdit.value = false;
-            Object.assign(formValue, props.value);
+            Object.assign(formValue, value.value);
           }
         ],
         [

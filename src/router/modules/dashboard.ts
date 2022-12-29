@@ -4,7 +4,7 @@ const dashboard: AuthRoute.Route = {
   name: 'dashboard',
   path: '/dashboard',
   component: getLayoutComponent('basic'),
-  redirectPath: '/dashboard/analysis',
+  redirect: '/dashboard/analysis',
   meta: {
     title: '儀錶板',
     icon: 'mdi:view-dashboard',

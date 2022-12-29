@@ -26,16 +26,16 @@ export function createColumns({
       }
     },
     {
-      title: t('common.name'),
+      title: t('column.name', 2),
       key: 'Name'
     },
     {
-      title: t('common.department'),
+      title: t('column.department'),
       key: 'Department',
       render: renderDepartment
     },
     {
-      title: t('common.role'),
+      title: t('column.role'),
       key: 'Role',
       render: renderRole
     }

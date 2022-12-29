@@ -16,6 +16,8 @@ declare namespace AuthRoute {
     contentType?: 'none' | 'card' | 'fixedCard';
     /** 順序 */
     order?: number;
+    /** cache page */
+    keepAlive?: boolean;
   };
 
   interface Route {

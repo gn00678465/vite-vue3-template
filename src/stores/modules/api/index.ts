@@ -9,13 +9,17 @@ import {
 } from '@/service/api';
 
 export const useApiStore = defineStore('api-store', () => {
-  const customerList = reactive<ApiResponse.CommonData<ApiResponse.CustomItem>>(
-    {
-      Total: 0,
-      Items: []
-    }
-  );
+  type CustomerList = ApiResponse.CommonData<ApiResponse.CustomItem> & {
+    ListMap: Map<number, ApiResponse.CustomItem>;
+  };
+
+  const customerList = reactive<CustomerList>({
+    Total: 0,
+    Items: [],
+    ListMap: new Map([])
+  });
   const userList: Ref<ApiResponse.UserItem[]> = ref([]);
+  const userListMap = ref<Map<number, ApiResponse.UserItem>>(new Map([]));
   const list = reactive({
     roleList: [],
     departmentList: [],
@@ -28,13 +32,16 @@ export const useApiStore = defineStore('api-store', () => {
     options: { reload?: boolean } = {}
   ) {
     const { reload = false } = options;
-    if (!reload && customerList.Items.length) return;
+    if (!reload && !!customerList.Items.length) return;
     const [err, data] = await fetchCustomerList<
       ApiResponse.CommonData<ApiResponse.CustomItem>
     >(from, size);
     if (data) {
       customerList.Total = data.Total;
       customerList.Items = data.Items;
+      customerList.Items.forEach((item) => {
+        customerList.ListMap.set(item.CustomerId, item);
+      });
     }
   }
 
@@ -45,12 +52,14 @@ export const useApiStore = defineStore('api-store', () => {
   ) {
     const { reload = false } = options;
     if (!reload && userList.value.length) return;
-    const [err, data] = await fetchUsersList<ApiResponse.UserItem[]>(
-      from,
-      size
-    );
+    const [err, data] = await fetchUsersList<
+      ApiResponse.CommonData<ApiResponse.UserItem>
+    >(from, size);
     if (data) {
-      userList.value = data;
+      userList.value = data.Items;
+      data.Items.forEach((item) => {
+        userListMap.value.set(item.UserId, item);
+      });
     }
   }
 
@@ -76,6 +85,7 @@ export const useApiStore = defineStore('api-store', () => {
   return {
     customerList,
     userList,
+    userListMap,
     ...toRefs(list),
     fetchCustomer,
     fetchUsers,

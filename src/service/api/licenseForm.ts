@@ -82,6 +82,13 @@ export function fetchSpecificApplicationForm<T>(formId: number) {
   );
 }
 
+// 取得單筆表單簽核狀態
+export function fetchSpecificFormRecord<T>(formId: number) {
+  return request.get<T>(
+    `/api/web/applicationform-state-record?applicationform_id=${formId}`
+  );
+}
+
 // 申請表單
 /**
  * 申請 POC 表單

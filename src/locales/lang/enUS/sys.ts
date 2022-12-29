@@ -7,9 +7,10 @@ export default {
   login_success: 'Login success!',
   login_success_message: 'Welcome back',
   occur_error: 'An error occurs.',
+  empty_describe: 'Empty data',
   api: {
     tokenExpired: 'AccessToken expired',
-    refreshTokenExpired: 'RefreshToken expired',
+    refreshTokenExpired: 'Your session is time out, please login again!',
     noToken: 'Token not exist',
     tokenAbnormal: 'Token Abnormal',
     success: 'Success',
@@ -27,6 +28,12 @@ export default {
     errMsg503:
       'The service is unavailable, the server is temporarily overloaded or maintained!',
     errMsg504: 'Network timeout!',
-    errMsg505: 'The http version does not support the request!'
+    errMsg505: 'The http version does not support the request!',
+    // Error response by backend
+    ApplicationformNotFound: 'Application form not found!',
+    NoFormalApplicationform:
+      'Formal application form not found or formal form not completed!',
+    DuplicateModule: 'Module application duplicated!',
+    CustomerExist: 'Customer already exist!'
   }
 };

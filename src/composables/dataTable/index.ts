@@ -1,2 +1,2 @@
-export * from './useFetchTableData';
 export * from './useDataTableDefProps';
+export * from './fetchData';

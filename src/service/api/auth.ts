@@ -30,8 +30,8 @@ export function fetchLoginInfo(Code: string, RedirectUrl: string) {
  * 取得 token & userInfo
  * @param accessToken Azure token
  */
-export function fetchUserInfo(accessToken: string) {
-  return request.post('/api/web/userInfo', {
+export function fetchUserInfo<T>(accessToken: string) {
+  return request.post<T>('/api/web/userInfo', {
     AccessToken: accessToken
   });
 }
@@ -52,6 +52,6 @@ export function fetchUpdateToken(refreshToken: string) {
 /**
  * 取得當前登入使用者權限
  */
-export function fetchUserPermission() {
-  return request.get('/api/web/userPermission');
+export function fetchUserPermission<T>() {
+  return request.get<T>('/api/web/userPermission');
 }

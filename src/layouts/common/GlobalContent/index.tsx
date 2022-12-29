@@ -4,7 +4,7 @@ import { useAppStore, useRouteStore } from '@/stores';
 
 export default defineComponent({
   name: 'GlobalContent',
-  setup(props) {
+  setup() {
     const appStore = useAppStore();
     const routeStore = useRouteStore();
 

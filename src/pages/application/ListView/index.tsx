@@ -1,78 +1,90 @@
-import {
-  defineComponent,
-  ref,
-  onBeforeMount,
-  h,
-  watch,
-  computed,
-  Fragment
-} from 'vue';
+import { defineComponent, ref, onBeforeMount, h, watch, reactive } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import FixedCard from '@/components/custom/FixedCard';
 import type { FixedCardSlots } from '@/components/custom/FixedCard';
-import { NDataTable, NButton, NPopover } from 'naive-ui';
+import { NDataTable, NButton, NPopover, NTag } from 'naive-ui';
 import type { DataTableFilterState } from 'naive-ui';
-import { Icon } from '@iconify/vue';
-import { CreateButton } from './components';
+import { CreateButton, CustomerFilter } from './components';
 import { useResizeObserver } from '@vueuse/core';
 import { useAPTerm } from '@/utils';
 import {
   createColumns,
-  ApplicationTableData,
   useApplicationFormFetch,
-  useApplicationFormRoute
+  useApplicationFormRoute,
+  ApplicationTableData,
+  ApplyModule,
+  fetchApi
 } from './utils';
-import { useRouterPush } from '@/composables';
+import { useRenderIcon, useRouterPush } from '@/composables';
 import {
   useFetchTableData,
-  FetchParams,
   useDataTableDefProps
-} from '@/composables/datatable';
+} from '@/composables/dataTable';
 import { useI18n } from '@/hooks';
 import { useApiStore } from '@/stores';
+import { messages } from '../locales';
+import { EnumFunctionModule } from '@/enum';
 
 export default defineComponent({
   name: 'ApplicationFormListView',
-  setup(props, ctx) {
+  setup() {
     const { t } = useI18n();
+    const { t: tl } = useI18n({ messages });
     const apiStore = useApiStore();
     const { routerPush } = useRouterPush(true);
-    const { pushCreateForm, pushSelectForm, appendRoute } =
+    const { pushCreateForm, pushSelectForm } =
       useApplicationFormRoute(routerPush);
-    //
+    // view
     const banner: Ref<null | HTMLElement> = ref(null);
     const bannerHeight: Ref<number> = ref(0);
 
-    const stateFilter: Ref<DataTableFilterState | null> = ref(null);
-    const { fetchApi } = useApplicationFormFetch(stateFilter);
+    // filter
+    const filterValue = reactive<{
+      State: null | string;
+      Customer: null | number;
+    }>({ State: null, Customer: null });
 
     const total: Ref<number> = ref(0);
     const database: Ref<ApplicationTableData[]> = ref([]);
 
     useResizeObserver(banner, (entries) => {
       const entry = entries[0];
-      const { width, height } = entry.contentRect;
+      const { height } = entry.contentRect;
       bannerHeight.value = height + 8;
     });
 
-    const { currentPage, currentPageSize, loading, loadingStart, loadingEnd } =
-      useFetchTableData(fetchData, total);
+    const {
+      currentPage,
+      currentPageSize,
+      loading,
+      loadingStart,
+      loadingEnd,
+      onPageUpdate,
+      opPageSizeUpdate
+    } = useFetchTableData({
+      total,
+      pageSize: 20,
+      onPageChange: fetchData,
+      onPageSizeChange: fetchData
+    });
 
-    async function fetchData({ currentPage, currentPageSize }: FetchParams) {
+    async function fetchData({
+      currentPage,
+      currentPageSize
+    }: {
+      currentPage: number;
+      currentPageSize: number;
+    }) {
       loadingStart();
       const [err, data] = await fetchApi.value<
         ApiResponse.CommonData<ApplicationTableData>
       >(useAPTerm(currentPage, currentPageSize).value, currentPageSize);
       if (data) {
-        total.value = data.Total;
-        database.value = data.Items as ApplicationTableData[];
-      }
-      if (data === null) {
-        total.value = 0;
-        database.value = [];
+        total.value = data.Total || 0;
+        database.value = (data.Items as ApplicationTableData[]) || [];
       }
       if (err) {
-        console.log(err);
+        console.log('ApplicationFormListView', err);
       }
       loadingEnd();
     }
@@ -99,55 +111,84 @@ export default defineComponent({
     const { useDataTableReactive, usePaginationReactive } =
       useDataTableDefProps();
 
-    const customerFilterOptions = computed(() => {
-      return apiStore.customerList.Items.map((item) => ({
-        value: item.CustomerId,
-        label: item.Customer
-      }));
-    });
-
     function renderIndex(index: number): number {
       return useAPTerm(currentPage, currentPageSize).value + index + 1;
     }
 
-    function renderAction(
-      rowData: ApplicationTableData,
-      index: number
-    ): VNodeChild {
+    function renderSale(rowData: ApplicationTableData): VNodeChild {
+      return apiStore.userListMap.get(rowData.SaleId)?.Name;
+    }
+
+    function renderModule(rowData: ApplicationTableData): VNodeChild {
+      const tags = rowData.ApplyModule?.map((item: ApplyModule) => {
+        return h(
+          NTag,
+          {
+            type: 'default',
+            size: 'small'
+          },
+          {
+            default: () => tl(`module.${EnumFunctionModule[item.Module]}`)
+          }
+        );
+      });
+      return h('div', { class: 'flex flex-wrap gap-[6px]' }, tags);
+    }
+
+    function renderCustomer(rowData: ApplicationTableData) {
+      return apiStore.customerList.ListMap.get(rowData.CustomerId)?.Customer;
+    }
+
+    function renderAction(rowData: ApplicationTableData): VNodeChild {
       return h('div', { class: 'flex justify-center items-center gap-x-1' }, [
         h(
           NButton,
           {
             size: 'small',
             onClick: () => {
-              pushSelectForm({
-                params: { id: rowData.ApplicationFormId },
-                query: { type: rowData.Type }
+              pushSelectForm(rowData.Type, {
+                params: { id: rowData.ApplicationFormId }
               });
             }
           },
-          () => t('common.view')
+          () => t('common.detail')
         ),
         h(
           NPopover,
           { trigger: 'click', placement: 'left' },
           {
             trigger: () =>
-              h(NButton, { size: 'small' }, () =>
-                h(Icon, { icon: 'mdi:dots-vertical' })
+              h(
+                NButton,
+                { size: 'small', quaternary: true },
+                useRenderIcon({ icon: 'mdi:dots-horizontal' })
               ),
             default: () =>
-              h(Fragment, [
+              h('div', { class: 'flex flex-col gap-y-1 items-center' }, [
                 h(
                   NButton,
                   {
                     size: 'small',
                     onClick: () => {
-                      console.log(rowData.CRMUrl);
+                      window.open(rowData.CRMUrl, '_blank');
                     }
                   },
-                  () => 'CRM'
-                )
+                  () => '開啟 CRM 連結'
+                ),
+                rowData.Type === 'Formal' &&
+                  rowData.State === 'Finish' &&
+                  h(
+                    NButton,
+                    {
+                      size: 'small',
+                      onClick: () => {
+                        pushCreateForm('FunctionModule', {
+                          query: { formalId: rowData.ApplicationFormId }
+                        });
+                      }
+                    },
+                    () => '申請模組試用單'
+                  )
               ])
           }
         )
@@ -159,7 +200,15 @@ export default defineComponent({
         {{
           default: ({ contentHeight }: FixedCardSlots) => (
             <div class="flex flex-col gap-y-2">
-              <div ref={banner} class="flex flex-items justify-end">
+              <div ref={banner} class="flex flex-items justify-end gap-x-2">
+                <CustomerFilter
+                  value={filterValue.Customer}
+                  onUpdate:value={(value: number) => {
+                    filterValue.State = null;
+                    filterValue.Customer = value;
+                    useApplicationFormFetch(filterValue);
+                  }}
+                />
                 <CreateButton on-select={pushCreateForm} />
               </div>
               <NDataTable
@@ -173,22 +222,22 @@ export default defineComponent({
                 }
                 columns={createColumns({
                   renderIndex,
+                  renderSale,
+                  renderCustomer,
                   renderAction,
-                  customerFilterOptions: customerFilterOptions.value
+                  renderModule
                 })}
                 pagination={usePaginationReactive({
                   itemCount: total.value,
                   page: currentPage.value,
                   pageSize: currentPageSize.value
                 })}
-                on-update:page={(page: number) => {
-                  currentPage.value = page;
-                }}
-                on-update:page-size={(size: number) => {
-                  currentPageSize.value = size;
-                }}
+                on-update:page={onPageUpdate}
+                on-update:page-size={opPageSizeUpdate}
                 on-update:filters={(filters: DataTableFilterState) => {
-                  stateFilter.value = filters;
+                  filterValue.Customer = null;
+                  Object.assign(filterValue, filters);
+                  useApplicationFormFetch(filterValue);
                 }}
               ></NDataTable>
             </div>

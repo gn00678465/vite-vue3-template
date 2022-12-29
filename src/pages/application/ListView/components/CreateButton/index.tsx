@@ -16,11 +16,11 @@ export default defineComponent({
       {
         label: 'POC 申請單',
         key: 'POC'
-      },
-      {
-        label: '功能模組申請單',
-        key: 'FunctionModule'
       }
+      // {
+      //   label: '功能模組申請單',
+      //   key: 'FunctionModule'
+      // }
     ];
 
     function handleSelect(key: string | number) {

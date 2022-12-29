@@ -1,6 +1,4 @@
-import { h, ref } from 'vue';
 import type { VNodeChild } from 'vue';
-import { NTag } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import {
   EnumApplicationFormType,
@@ -9,24 +7,25 @@ import {
 } from '@/enum';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { fetchesObj, FetchKeys } from './fetch';
-import { renderState, renderExpand } from './render';
-import { stateDefault, customerDefault } from './fetch';
+import { renderState } from './render';
+import { stateDefault } from './fetch';
+import { useI18n } from '@/hooks';
 
 export type Types = keyof typeof EnumApplicationFormType;
 export type States = keyof typeof EnumApplicationFormState;
 export type Modules = keyof typeof EnumFunctionModule;
 
-interface ApplyModule {
+export interface ApplyModule {
   Module: Modules;
   Date?: Date;
 }
 
 export interface ApplicationTableData extends Object {
   ApplicationFormId: number;
-  Sale: string;
+  SaleId: number;
   Type: Types;
   State: States;
-  Customer: string;
+  CustomerId: number;
   CRMUrl: string;
   CreateTime: Date;
   ApplyModule?: ApplyModule[];
@@ -44,20 +43,24 @@ const stateFilterOptions = Object.entries(fetchesObj).map(([k, v]) => ({
   label: v.label
 }));
 
+type RenderFn = (rowData: ApplicationTableData, index?: number) => VNodeChild;
+
 export function createColumns({
   renderIndex,
+  renderSale,
+  renderCustomer,
   renderAction,
-  customerFilterOptions
+  renderModule
 }: {
   renderIndex: (index: number) => number;
-  renderAction: (rowData: ApplicationTableData, index: number) => VNodeChild;
-  customerFilterOptions: Array<{ value: number; label: string }>;
+  renderSale: RenderFn;
+  renderCustomer: RenderFn;
+  renderAction: RenderFn;
+  renderModule: RenderFn;
 }): DataTableColumns<ApplicationTableData> {
+  const { t } = useI18n();
+
   return [
-    // {
-    //   type: 'expand',
-    //   renderExpand: renderExpand
-    // },
     {
       title: '#',
       key: 'index',
@@ -68,51 +71,35 @@ export function createColumns({
       width: 60
     },
     {
-      title: 'ID',
+      title: t('column.ID'),
       key: 'ApplicationFormId',
       align: 'center',
       width: 60
     },
     {
-      title: 'Sale',
-      key: 'Sale'
+      title: t('column.Sale'),
+      key: 'SaleId',
+      render: renderSale
     },
     {
-      title: 'Customer',
-      key: 'Customer',
-      filterMultiple: false,
-      filter: true,
-      filterOptionValue: customerDefault.value,
-      filterOptions: customerFilterOptions
+      title: t('column.Customer'),
+      key: 'CustomerId',
+      render: renderCustomer
     },
     {
-      title: 'Type',
+      title: t('column.Type'),
       key: 'Type',
       render(rowData) {
         return EnumApplicationFormType[rowData.Type];
       }
     },
     {
-      title: 'ApplyModule',
+      title: t('column.ApplyModule'),
       key: 'ApplyModule',
-      render: (rowData) => {
-        const tags = rowData.ApplyModule?.map((item: ApplyModule) => {
-          return h(
-            NTag,
-            {
-              type: 'default',
-              size: 'small'
-            },
-            {
-              default: () => EnumFunctionModule[item.Module]
-            }
-          );
-        });
-        return h('div', { class: 'flex flex-wrap gap-[6px]' }, tags);
-      }
+      render: renderModule
     },
     {
-      title: 'State',
+      title: t('column.State'),
       key: 'State',
       render: renderState,
       filterMultiple: false,
@@ -121,7 +108,7 @@ export function createColumns({
       filterOptions: stateFilterOptions
     },
     {
-      title: 'CreateTime',
+      title: t('column.CreateTime'),
       key: 'CreateTime',
       render: (rowData) => {
         const zonedDate = utcToZonedTime(rowData.CreateTime, 'Asia/Taipei');

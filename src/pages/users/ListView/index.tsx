@@ -14,7 +14,6 @@ import {
 } from './utils';
 import {
   useFetchTableData,
-  FetchParams,
   useDataTableDefProps
 } from '@/composables/dataTable';
 import { assoc, pipe } from 'ramda';
@@ -39,8 +38,20 @@ export default defineComponent({
       duration: 1500
     });
 
-    const { currentPage, currentPageSize, loading, loadingStart, loadingEnd } =
-      useFetchTableData(fetchData, total);
+    const {
+      currentPage,
+      currentPageSize,
+      loading,
+      loadingStart,
+      loadingEnd,
+      onPageUpdate,
+      opPageSizeUpdate
+    } = useFetchTableData({
+      total,
+      pageSize: 20,
+      onPageChange: fetchData,
+      onPageSizeChange: fetchData
+    });
 
     onBeforeMount(() => {
       fetchData({
@@ -53,15 +64,20 @@ export default defineComponent({
       ]);
     });
 
-    async function fetchData({ currentPage, currentPageSize }: FetchParams) {
+    async function fetchData({
+      currentPage,
+      currentPageSize
+    }: {
+      currentPage: number;
+      currentPageSize: number;
+    }) {
       loadingStart();
-      const [err, data] = await fetchUsersList<UserInfo>(
-        useAPTerm(currentPage, currentPageSize).value,
-        currentPageSize
-      );
+      const [err, data] = await fetchUsersList<
+        ApiResponse.CommonData<UserInfo>
+      >(useAPTerm(currentPage, currentPageSize).value, currentPageSize);
       if (data) {
-        total.value = data.length;
-        list.value = data as UserInfo[];
+        total.value = data.Total;
+        list.value = data.Items;
       } else {
         total.value = 0;
         list.value = [];
@@ -174,12 +190,8 @@ export default defineComponent({
                 renderDepartment,
                 renderRole
               })}
-              on-update:page={(page: number) => {
-                currentPage.value = page;
-              }}
-              on-update:page-size={(size: number) => {
-                currentPageSize.value = size;
-              }}
+              on-update:page={onPageUpdate}
+              on-update:page-size={opPageSizeUpdate}
             ></NDataTable>
           )
         }}

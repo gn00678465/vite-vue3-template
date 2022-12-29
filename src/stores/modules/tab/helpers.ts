@@ -46,7 +46,7 @@ export function isInTabRoutes(tabs: App.GlobalTabRoute[], fullPath: string) {
 
 export function getTabRoutes() {
   const routes: App.GlobalTabRoute[] = [];
-  const data: App.GlobalTabRoute[] = localStorage.get('multiTabRoutes');
+  const data = localStorage.get('multiTabRoutes') as App.GlobalTabRoute[];
   if (data) {
     const defaultTabRoutes = data.map((item) => ({
       ...item,

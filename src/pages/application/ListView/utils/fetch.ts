@@ -1,5 +1,4 @@
-import { ref, watch, Ref } from 'vue';
-import type { DataTableFilterState } from 'naive-ui';
+import { ref, Ref } from 'vue';
 import { curry } from 'ramda';
 import {
   fetchApplicationForm,
@@ -10,83 +9,52 @@ import {
   fetchApplicationFinish,
   fetchApplicationCustomer
 } from '@/service/api';
-import { diff, isEmptyObj } from '@/utils';
+import { useI18n } from '@/hooks';
 
-export const customerDefault: Ref<any> = ref(undefined);
-export const stateDefault: Ref<any> = ref(undefined);
+const { t } = useI18n();
+
+export const stateDefault: Ref<any> = ref(null);
+
+export const fetchApi = ref(fetchApplicationForm);
 
 export const fetchesObj = {
   WaitApproval: {
-    label: 'WaitApproval',
+    label: t(`common.waitApproval`),
     api: fetchApplicationFormWaitingApproval
   },
   WaitSN: {
-    label: 'WaitSN',
+    label: t(`common.waitSN`),
     api: fetchApplicationWaitSN
   },
   Finish: {
-    label: 'Finish',
+    label: t(`common.finish`),
     api: fetchApplicationFinish
   },
-  Cancel: {
-    label: 'Cancel',
+  Revoke: {
+    label: t(`common.revoke`),
     api: fetchApplicationFormCancel
   },
   Reject: {
-    label: 'Reject',
+    label: t(`common.reject`),
     api: fetchApplicationFormReject
   }
 };
 
 export type FetchKeys = keyof typeof fetchesObj;
 
-export function useApplicationFormFetch(
-  stateFilter: Ref<DataTableFilterState | null>
-) {
-  const fetchApi = ref(fetchApplicationForm);
-  const fetchCustomer = curry(fetchApplicationCustomer);
-
-  watch(stateFilter, (value, old) => {
-    // first
-    if (!old && !!value) {
-      if (value.State) {
-        fetchApi.value = fetchesObj[value.State as FetchKeys].api;
-      }
-      if (value.Customer) {
-        fetchApi.value = fetchCustomer(value.Customer as number);
-      }
-    }
-    if (!!old && !!value) {
-      const difference = diff(old, value);
-      if (isEmptyObj(difference)) {
-        return;
-      }
-      // update state
-      if (difference?.State) {
-        customerDefault.value = null;
-        stateDefault.value = difference?.State;
-        fetchApi.value = fetchesObj[difference.State as FetchKeys].api;
-      }
-      // reset state
-      if (difference.State === null) {
-        // if (customerDefault.value) return;
-        fetchApi.value = fetchApplicationForm;
-      }
-      // update customer
-      if (difference?.Customer) {
-        stateDefault.value = null;
-        customerDefault.value = difference?.Customer;
-        fetchApi.value = fetchCustomer(value.Customer as number);
-      }
-      // reset customer
-      if (difference.Customer === null) {
-        // if (stateDefault.value) return;
-        fetchApi.value = fetchApplicationForm;
-      }
-    }
-  });
-
-  return {
-    fetchApi
-  };
+export function useApplicationFormFetch(filterValue: {
+  State: null | string;
+  Customer: null | number;
+}) {
+  stateDefault.value = filterValue.State;
+  if (filterValue.State) {
+    fetchApi.value = fetchesObj[filterValue.State as FetchKeys]?.api;
+    return;
+  }
+  if (filterValue.Customer) {
+    const fetchCustomer = curry(fetchApplicationCustomer);
+    fetchApi.value = fetchCustomer(filterValue.Customer);
+    return;
+  }
+  fetchApi.value = fetchApplicationForm;
 }

@@ -1,7 +1,7 @@
 import { defineComponent, ref, watchEffect, PropType } from 'vue';
 import { NFormItem, NUpload, NModal } from 'naive-ui';
 import type { UploadFileInfo } from 'naive-ui';
-import { useFileReader, useRandomId } from '@/hooks';
+import { useFileReader, useRandomId, useDownloadFile } from '@/hooks';
 
 export default defineComponent({
   name: 'UploadAttachment',
@@ -20,6 +20,9 @@ export default defineComponent({
     const showModalRef = ref(false);
     const previewImageUrlRef = ref('');
     const defaultFileList = ref<UploadFileInfo[]>([]);
+    const contentType = ref('image/png');
+
+    const { downloadBase64File } = useDownloadFile();
 
     watchEffect(() => {
       handleDefaultFileList(props.defaultValue);
@@ -49,14 +52,15 @@ export default defineComponent({
     }
 
     const handleDownload = (file: UploadFileInfo) => {
-      console.log(file);
+      downloadBase64File(
+        previewImageUrlRef.value,
+        contentType.value,
+        '申請單.png'
+      );
     };
 
     return () => (
-      <div class="px-3 pt-5 relative border rounded-sm">
-        <p class="absolute top-[-30px] left-[-1px] px-2 py-1 bg-blue-200">
-          上傳附件
-        </p>
+      <>
         <NFormItem path="Images" label="上傳申請單" required>
           <NUpload
             listType="image-card"
@@ -91,11 +95,11 @@ export default defineComponent({
           }}
         >
           <img
-            src={'data:image/png;base64, ' + previewImageUrlRef.value}
+            src={`data:${contentType.value};base64,${previewImageUrlRef.value}`}
             style="width: 100%"
           />
         </NModal>
-      </div>
+      </>
     );
   }
 });

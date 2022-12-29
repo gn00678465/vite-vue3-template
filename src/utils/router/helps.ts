@@ -20,16 +20,16 @@ export function transformToVueRoute(item: AuthRoute.Route) {
   const resultRoute: RouteRecordRaw[] = [];
   const itemRoute = { ...item } as RouteRecordRaw;
 
-  if (hasChildren(item)) {
-    const children = (item.children as AuthRoute.Route[])
-      .map((child) => transformToVueRoute(child))
-      .flat();
+  // if (hasChildren(item)) {
+  //   const children = (item.children as AuthRoute.Route[])
+  //     .map((child) => transformToVueRoute(child))
+  //     .flat();
 
-    const redirectPath =
-      children.find((child) => !hasChildren(child))?.path ?? '/';
+  //   const redirectPath =
+  //     children.find((child) => !hasChildren(child))?.path ?? '/';
 
-    itemRoute.redirect = redirectPath;
-  }
+  //   itemRoute.redirect = redirectPath;
+  // }
 
   resultRoute.push(itemRoute);
 

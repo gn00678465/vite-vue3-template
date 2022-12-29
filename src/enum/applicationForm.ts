@@ -5,10 +5,10 @@ export enum EnumApplicationFormType {
 }
 
 export enum EnumApplicationFormState {
-  'Cancel' = '取消申請',
-  'Reject' = '申請被拒',
-  'ManagerCheck' = '主管審核中',
-  'FinalCheck' = 'FAE 審核中',
+  'Cancel' = '已撤回',
+  'Reject' = '已駁回',
+  'ManagerCheck' = '業務主管審核中',
+  'FinalCheck' = 'FAE 主管審核中',
   'Finish(WaitingForSerial)' = '完成(等待序號)',
   'Finish' = '完成'
 }

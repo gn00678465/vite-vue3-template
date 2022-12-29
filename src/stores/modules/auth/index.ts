@@ -21,10 +21,10 @@ const useAuthStore = defineStore('auth-store', {
     loginLoading: false
   }),
   getters: {
-    isLogin(state) {
+    isLogin(state): boolean {
       return Boolean(state.token);
     },
-    isAdmin(state) {
+    isAdmin(state): boolean {
       return state.userInfo?.Role === 'Admin';
     }
   },
@@ -35,7 +35,7 @@ const useAuthStore = defineStore('auth-store', {
      */
     async loginByToken(accessToken: string) {
       let flag = false;
-      const [error, data] = await fetchUserInfo(accessToken);
+      const [error, data] = await fetchUserInfo<ApiAuth.Token>(accessToken);
       if (data) {
         const { AccessToken, RefreshToken } = data;
 
@@ -56,7 +56,7 @@ const useAuthStore = defineStore('auth-store', {
     },
     /** 取得登入者權限 */
     async updateUserInfo() {
-      const [err, data] = await fetchUserPermission();
+      const [err, data] = await fetchUserPermission<ApiAuth.UserInfo>();
       if (data) {
         localStorage.set('userInfo', data);
         Object.assign(this.userInfo, data);

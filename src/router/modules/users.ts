@@ -4,7 +4,7 @@ const dashboard: AuthRoute.Route = {
   name: 'users',
   path: '/users',
   component: getLayoutComponent('basic'),
-  redirectPath: '/users/list',
+  redirect: '/users/list-view',
   meta: {
     title: '使用者',
     icon: 'fa-solid:users',
@@ -18,7 +18,8 @@ const dashboard: AuthRoute.Route = {
       meta: {
         title: '清單',
         icon: 'material-symbols:list-alt-outline',
-        requiresAuth: true
+        requiresAuth: true,
+        keepAlive: true
       }
     }
   ]

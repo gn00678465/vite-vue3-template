@@ -4,6 +4,7 @@ import GlobalHeader from './GlobalHeader';
 import GlobalSider from './GlobalSider';
 import GlobalLogo from './GlobalLogo';
 import GlobalTab from './GlobalTab';
+import GlobalBackTop from './GlobalBackTop';
 
 export {
   BasicLayout,
@@ -11,5 +12,6 @@ export {
   GlobalHeader,
   GlobalSider,
   GlobalLogo,
-  GlobalTab
+  GlobalTab,
+  GlobalBackTop
 };

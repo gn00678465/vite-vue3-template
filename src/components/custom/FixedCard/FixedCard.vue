@@ -1,21 +1,9 @@
+<script lang="tsx">
 import { defineComponent, computed, ref } from 'vue';
 import { ComputedRef, Ref } from 'vue';
 import { NCard, NScrollbar } from 'naive-ui';
 import { useLayoutStore } from '@/stores';
-
-type TScrollOption = {
-  left?: number;
-  top?: number;
-  behavior?: ScrollBehavior;
-};
-
-export type TScrollMethod = (arg0: TScrollOption) => void;
-
-export type FixedCardSlots = {
-  contentHeight: ComputedRef<number>;
-  scrollTo: TScrollMethod;
-  scrollBy: TScrollMethod;
-};
+import type { TScrollOption } from './utils';
 
 export default defineComponent({
   name: 'FixedCard',
@@ -50,7 +38,6 @@ export default defineComponent({
             height: '100%'
           }
         }
-        {...props}
       >
         {props.fixed ? (
           <NScrollbar
@@ -70,3 +57,6 @@ export default defineComponent({
     );
   }
 });
+</script>
+
+<style scoped></style>

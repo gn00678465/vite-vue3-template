@@ -5,7 +5,8 @@ import {
   GlobalContent,
   GlobalHeader,
   GlobalSider,
-  GlobalTab
+  GlobalTab,
+  GlobalBackTop
 } from '../common';
 import { useAppStore } from '@/stores';
 

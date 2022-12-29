@@ -7,9 +7,10 @@ export default {
   login_success: '登入成功!',
   login_success_message: '歡迎回來',
   occur_error: '發生錯誤',
+  empty_describe: '無資料',
   api: {
     tokenExpired: 'AccessToken 過期',
-    refreshTokenExpired: 'RefreshToken 過期',
+    refreshTokenExpired: '閒置過久，請重新登入!',
     noToken: 'Token 未帶入',
     tokenAbnormal: 'Token 異常',
     success: '成功',
@@ -25,6 +26,11 @@ export default {
     errMsg502: '錯誤閘道!',
     errMsg503: '服務無法使用!',
     errMsg504: '閘道逾時!',
-    errMsg505: '不支援的 HTTP 版本!'
+    errMsg505: '不支援的 HTTP 版本!',
+    // 後端回應錯誤
+    ApplicationformNotFound: '表單不存在!',
+    NoFormalApplicationform: '未申請正式單或正式單位簽核完成!',
+    DuplicateModule: '模組重複申請!',
+    CustomerExist: '客戶已存在!'
   }
 };

@@ -13,7 +13,7 @@ interface ReturnType<T> {
 }
 
 export function useNotification(
-  initOption: NotificationOptions
+  initOption: NotificationOptions = {}
 ): ReturnType<NotificationOptions> {
   function createSuccessNotify(options: NotificationOptions) {
     window.$notify.success(mergeRight(initOption, options));
