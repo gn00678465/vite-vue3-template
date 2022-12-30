@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "yarn typecheck && vite build",
     "debug": "vite --debug",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",

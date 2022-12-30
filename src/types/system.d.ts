@@ -15,3 +15,7 @@ declare namespace App {
     };
   }
 }
+
+declare namespace EnumType {
+  type LayoutComponentName = 'basic' | 'blank';
+}

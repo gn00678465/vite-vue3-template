@@ -8,10 +8,11 @@ interface IStyle {
 
 interface IConfig extends IStyle {
   icon: string;
+  className?: string;
 }
 
 export function useRenderIcon(config: IConfig) {
-  const { color, fontSize, icon } = config;
+  const { color, fontSize, icon, className } = config;
   const style: IStyle = {};
   if (color) {
     style.color = color;
@@ -22,5 +23,5 @@ export function useRenderIcon(config: IConfig) {
   if (!icon) {
     window.Error('未傳入 icon 值');
   }
-  return () => h(SvgIcon, { icon, style });
+  return () => h(SvgIcon, { icon, style, class: className });
 }

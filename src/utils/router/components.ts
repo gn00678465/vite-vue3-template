@@ -1,7 +1,6 @@
 import { AdminLayout, BlankLayout } from '@/layouts';
-import type { DefineComponent } from 'vue';
 
-export function getLayoutComponent(layoutType: string) {
+export function getLayoutComponent(layoutType: EnumType.LayoutComponentName) {
   const layoutComponent = {
     basic: AdminLayout,
     blank: BlankLayout

@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'GlobalTab',
-  setup(props) {
+  setup() {
     const tab = useTabStore();
     const route = useRoute();
 

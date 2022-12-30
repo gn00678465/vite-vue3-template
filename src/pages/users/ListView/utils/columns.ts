@@ -26,6 +26,8 @@ export function createColumns({
       }
     },
     {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       title: t('column.name', 2),
       key: 'Name'
     },

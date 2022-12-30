@@ -65,6 +65,8 @@ export default class {
     );
 
     this.instance.interceptors.response.use(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       (response) => {
         const { status } = response;
 

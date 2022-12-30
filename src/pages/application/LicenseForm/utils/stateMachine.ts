@@ -451,11 +451,19 @@ const stateMachineConfig: MachineConfig<Context, any, Event> = {
 const stateMachineOptions: MachineOptions<Context, Event> = {
   actions: {
     Cancel: assign({
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       param: (context, event) => event.param,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       actions: (context, event) => event.actions
     }),
     Reject: assign({
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       param: (context, event) => event.param,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       actions: (context, event) => event.actions
     }),
     handleSuccess(context, event) {

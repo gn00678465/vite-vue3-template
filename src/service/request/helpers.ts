@@ -43,7 +43,10 @@ function handleRefreshToken() {
   });
 }
 
-const processQueue = (error: AxiosError | null, token = null) => {
+const processQueue = (
+  error: AxiosError | null,
+  token: null | string = null
+) => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
@@ -80,7 +83,7 @@ export default function (error: AxiosError) {
   return new Promise((resolve, reject) => {
     handleRefreshToken
       .call(handleRefreshToken)
-      .then((data) => {
+      .then((data: any) => {
         handleAuth(originalRequest, data.AccessToken);
         processQueue(null, data.AccessToken);
         resolve(originalRequest);

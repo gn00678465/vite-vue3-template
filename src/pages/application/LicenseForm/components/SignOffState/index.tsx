@@ -24,6 +24,8 @@ export default defineComponent({
             <p>單號： {route.params.id}</p>
           </li>
           <li>
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
             <p>狀態： {t(props.state, 1)}</p>
           </li>
         </ul>

@@ -13,7 +13,7 @@ export async function createDynamicRouterGuard(
 
   if (!route.isInitAuthRoute) {
     if (!isLogin) {
-      const toName = to.name as AuthRoute.RouteKey;
+      const toName = to.name as RoutePage.RouteKey;
       if (route.isValidConstRouteName(toName) && !to.meta.requiresAuth) {
         next();
       } else {

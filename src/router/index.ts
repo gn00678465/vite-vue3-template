@@ -22,7 +22,7 @@ export async function setupRouter(app: App) {
   await router.isReady();
 }
 
-export function routeName(name: AuthRoute.RouteKey) {
+export function routeName(name: RoutePage.RouteKey) {
   return name;
 }
 

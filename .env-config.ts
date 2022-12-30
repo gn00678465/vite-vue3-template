@@ -1,4 +1,6 @@
-const serviceEnv = {
+type ServiceEnv = Record<ServiceEnvType, ServiceEnvConfig>
+
+const serviceEnv: ServiceEnv = {
   development: {
     url: 'https://192.168.1.13:443',
     urlPattern: '/api'
@@ -9,6 +11,6 @@ const serviceEnv = {
   }
 };
 
-export function getServiceEnvConfig(mode: string) {
+export function getServiceEnvConfig(mode: ServiceEnvType) {
   return serviceEnv[mode];
 }

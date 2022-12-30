@@ -142,6 +142,8 @@ export default defineComponent({
               {{
                 header: () => (
                   <p>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
                     {t(item.State, 2)}：{item.Name}
                   </p>
                 ),

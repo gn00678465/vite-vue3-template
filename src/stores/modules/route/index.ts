@@ -1,12 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-import {
-  ROOT_ROUTER,
-  constantRoutes,
-  router,
-  routes as authRoutes
-} from '@/router';
+import { constantRoutes, router, routes as authRoutes } from '@/router';
 import {
   filterWithoutPermission,
   transformToVueRoutes,
@@ -14,7 +9,6 @@ import {
   getConstantRouteNames,
   transformRoutePathToRouteName
 } from '@/utils';
-import { useAuthStore } from '../auth';
 import { useTabStore } from '../tab';
 
 export const useRouteStore = defineStore('route-store', () => {
@@ -25,7 +19,7 @@ export const useRouteStore = defineStore('route-store', () => {
   );
   const cacheRoutes: Ref<string[]> = ref([]);
 
-  function isValidConstRouteName(name: AuthRoute.RouteKey) {
+  function isValidConstRouteName(name: RoutePage.RouteKey) {
     return (
       getConstantRouteNames(constantRoutes).includes(name) &&
       name !== 'not-found'

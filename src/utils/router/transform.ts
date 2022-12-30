@@ -1,4 +1,4 @@
-export function transformRoutePathToRouteName(path) {
+export function transformRoutePathToRouteName(path: string) {
   if (path === '/') return 'root';
   const pathSplitMark = '/';
   const routeSplitMark = '_';
