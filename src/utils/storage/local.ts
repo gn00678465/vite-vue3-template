@@ -5,55 +5,36 @@ interface StorageData<T> {
   expire: number | null;
 }
 
+interface StorageOptions {
+  crypto: boolean;
+}
+
 export function createLocalStorage<T extends StorageInterface.Local>() {
-  function set<K extends keyof T>(key: K, value: T[K]) {
+  function set<K extends keyof T>(
+    key: K,
+    value: T[K],
+    options?: StorageOptions
+  ) {
+    const crypto = options?.crypto;
     const storageData: StorageData<T[K]> = {
       value,
       expire: null
     };
 
-    const json = JSON.stringify(storageData);
+    const json = crypto ? encrypt(storageData) : JSON.stringify(storageData);
     window.localStorage.setItem(key as string, json);
   }
 
-  function get<K extends keyof T>(key: K) {
+  function get<K extends keyof T>(key: K, options?: StorageOptions) {
+    const crypto = options?.crypto;
     const json = window.localStorage.getItem(key as string);
     if (json) {
       let storageData: StorageData<T[K]> | null = null;
       try {
-        storageData = JSON.parse(json);
+        storageData = crypto ? decrypt(json) : JSON.parse(json);
       } catch (e) {
         // parse failure
       }
-
-      if (storageData) {
-        return storageData.value as T[K];
-      }
-      remove(key);
-      return null;
-    }
-    return null;
-  }
-
-  function setEncrypt<K extends keyof T>(key: K, value: T[K]) {
-    const storageData: StorageData<T[K]> = {
-      value,
-      expire: null
-    };
-    const json = encrypt(storageData);
-    window.localStorage.setItem(key as string, json);
-  }
-
-  function getDecrypt<K extends keyof T>(key: K) {
-    const json = window.localStorage.getItem(key as string);
-    if (json) {
-      let storageData: StorageData<T[K]> | null = null;
-      try {
-        storageData = decrypt(json);
-      } catch (e) {
-        // parse failure
-      }
-
       if (storageData) {
         return storageData.value as T[K];
       }
@@ -73,9 +54,7 @@ export function createLocalStorage<T extends StorageInterface.Local>() {
 
   return {
     set,
-    setEncrypt,
     get,
-    getDecrypt,
     remove,
     clear
   };

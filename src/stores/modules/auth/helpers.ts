@@ -1,15 +1,11 @@
 import { localStorage } from '@/utils';
 
-export function getToken() {
-  return localStorage.get('token') || '';
-}
-
 export function getUserInfo() {
   const emptyInfo: Auth.UserInfo = {
     Username: '',
     UserId: 0
   };
-  return localStorage.get('userInfo') || emptyInfo;
+  return localStorage.get('userInfo', { crypto: true }) || emptyInfo;
 }
 
 export function cleanAuthStorage() {

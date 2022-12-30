@@ -1,9 +1,9 @@
 import { unref } from 'vue';
 import { defineStore } from 'pinia';
 import { fetchUserInfo, fetchUserPermission } from '@/service/api';
-import { localStorage } from '@/utils';
+import { localStorage, getToken } from '@/utils';
 import { router } from '@/router';
-import { getToken, cleanAuthStorage, getUserInfo } from './helpers';
+import { cleanAuthStorage, getUserInfo } from './helpers';
 import { useRouterPush } from '@/composables';
 import { useRouteStore } from '../route';
 import { useI18n } from '@/hooks';
@@ -50,15 +50,15 @@ const useAuthStore = defineStore('auth-store', {
     },
     /** 存放 token 到 localStorage */
     updateToken(AccessToken: string, RefreshToken: string) {
-      localStorage.set('token', AccessToken);
-      localStorage.set('refreshToken', RefreshToken);
+      localStorage.set('token', AccessToken, { crypto: true });
+      localStorage.set('refreshToken', RefreshToken, { crypto: true });
       this.token = AccessToken;
     },
     /** 取得登入者權限 */
     async updateUserInfo() {
       const [err, data] = await fetchUserPermission<ApiAuth.UserInfo>();
       if (data) {
-        localStorage.set('userInfo', data);
+        localStorage.set('userInfo', data, { crypto: true });
         Object.assign(this.userInfo, data);
       }
     },

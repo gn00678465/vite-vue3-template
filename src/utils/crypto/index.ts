@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js';
 import AES from 'crypto-js/aes';
 
 const CryptoSecret = '__CryptoJS_rapix__';

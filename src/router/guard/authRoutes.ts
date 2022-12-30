@@ -1,7 +1,7 @@
 import { routeName } from '@/router';
 import { useRouteStore } from '@/stores/modules/route';
 import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
-import { localStorage } from '@/utils';
+import { getToken } from '@/utils';
 
 export async function createDynamicRouterGuard(
   to: RouteLocationNormalized,
@@ -9,7 +9,7 @@ export async function createDynamicRouterGuard(
   next: NavigationGuardNext
 ) {
   const route = useRouteStore();
-  const isLogin = Boolean(localStorage.get('token'));
+  const isLogin = Boolean(getToken());
 
   if (!route.isInitAuthRoute) {
     if (!isLogin) {

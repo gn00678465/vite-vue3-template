@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, AxiosError } from 'axios';
-import { localStorage, handleAuth } from '@/utils';
+import { handleAuth, getRefreshToken } from '@/utils';
 import { useAuthStore } from '@/stores';
 import { fetchUpdateToken } from '../api';
 
@@ -22,7 +22,7 @@ let isRefreshing = false;
 const failedQueue: Queue[] = [];
 
 function handleRefreshToken() {
-  const refreshToken = localStorage.get('refreshToken') || '';
+  const refreshToken = getRefreshToken();
   const { updateToken } = useAuthStore();
   return new Promise((resolve, reject) => {
     fetchUpdateToken(refreshToken)

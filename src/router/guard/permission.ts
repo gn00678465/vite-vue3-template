@@ -1,7 +1,7 @@
 import { createDynamicRouterGuard } from './authRoutes';
 import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 import { routeName } from '@/router';
-import { localStorage } from '@/utils';
+import { getToken } from '@/utils';
 import { useAuthStore } from '@/stores';
 
 export async function createPermissionGuard(
@@ -19,7 +19,7 @@ export async function createPermissionGuard(
     return;
   }
 
-  const isLogin = Boolean(localStorage.get('token'));
+  const isLogin = Boolean(getToken());
   const needLogin = Boolean(to.meta.requiresAuth);
 
   if (isLogin && to.name === routeName('login')) {

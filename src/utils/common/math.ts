@@ -12,6 +12,7 @@ export function useAPTerm(
   common: MaybeComputedRef<number>
 ): ComputedRef<number> {
   return computed(() => {
+    if (resolveUnref(term) <= 0 || resolveUnref(common) < 0) return 0;
     return (resolveUnref(term) - 1) * resolveUnref(common);
   });
 }

@@ -11,9 +11,8 @@ import {
   handleRequestHeader,
   handleNetworkError,
   handleResponseError,
-  localStorage,
-  showMessage,
-  execStrategyActions
+  getToken,
+  showMessage
 } from '@/utils';
 import { AxiosCanceler } from '@/utils/service/cancel';
 import handleRefreshToken from './helpers';
@@ -51,10 +50,7 @@ export default class {
         // 處理 header
         handleConfig = await handleRequestHeader(handleConfig);
         // 處理 token
-        handleConfig = handleAuth(
-          handleConfig,
-          localStorage.get('token') || ''
-        );
+        handleConfig = handleAuth(handleConfig, getToken());
         return handleConfig;
       },
       (axiosError: AxiosError) => {
