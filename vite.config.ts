@@ -34,6 +34,28 @@ export default defineConfig((configEnv) => {
         cert: fs.readFileSync('./localhost+3.pem')
       }
     },
-    logLevel: 'warn'
+    logLevel: 'warn',
+    build: {
+      sourcemap: true,
+      chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              const arr = id.toString().split('node_modules/')[1].split('/');
+              switch (arr[0]) {
+                case '@vue':
+                case 'naive-ui':
+                  return '_' + arr[0];
+                  break;
+                default:
+                  return '__vendor';
+                  break;
+              }
+            }
+          }
+        }
+      }
+    }
   };
 });
