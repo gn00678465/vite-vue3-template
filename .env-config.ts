@@ -6,7 +6,7 @@ const serviceEnv: ServiceEnv = {
     urlPattern: '/api'
   },
   production: {
-    url: 'http://localhost:8080',
+    url: '',
     urlPattern: '/api'
   }
 };
