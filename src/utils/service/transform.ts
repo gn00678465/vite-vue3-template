@@ -1,5 +1,4 @@
 import qs from 'qs';
-import FormData from 'form-data';
 import { EnumContentType } from '@/enum';
 import { isArray, isFile } from '../common';
 
@@ -45,6 +44,6 @@ async function transformFile(
       })
     );
   } else {
-    formData.append(key, file);
+    formData.append(key, file as File);
   }
 }
