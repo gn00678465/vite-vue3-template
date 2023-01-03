@@ -1,5 +1,6 @@
 export default {
   app_title: '授權申請系統',
+  app_desc: '授權申請系統',
   azure_login: '使用 Azure 登入',
   profile: '個人資料',
   logout: '登出',

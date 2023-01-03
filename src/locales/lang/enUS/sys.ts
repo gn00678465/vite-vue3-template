@@ -1,5 +1,6 @@
 export default {
   app_title: 'License System',
+  app_desc: 'License System',
   azure_login: 'Use Azure to login.',
   profile: 'Profile',
   logout: 'Logout',
