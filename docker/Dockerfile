@@ -1,5 +1,8 @@
 FROM node:16.17.1 as build-stage
 
+ARG version
+ENV COMMITID=$version
+
 ENV WORKDIR=/app
 
 WORKDIR $WORKDIR
