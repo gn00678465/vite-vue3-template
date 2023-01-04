@@ -5,21 +5,21 @@ import {
 } from '@vueuse/core';
 import { useLoading, UseLoadingReturn } from '@/hooks';
 
-export interface UseFetchTableDataOptions extends UseOffsetPaginationOptions {
+export interface UseFetchPaginationOptions extends UseOffsetPaginationOptions {
   onPageUpdate?: (arg: number) => void;
   opPageSizeUpdate?: (arg: number) => void;
 }
 
 type ReturnValue = UseOffsetPaginationReturn & UseLoadingReturn;
 
-export interface UseFetchTableDataReturnValue extends ReturnValue {
+export interface UseFetchPaginationReturnValue extends ReturnValue {
   onPageUpdate: (arg: number) => void;
   opPageSizeUpdate: (arg: number) => void;
 }
 
-export function useFetchTableData(
-  options: UseFetchTableDataOptions
-): UseFetchTableDataReturnValue {
+export function useFetchPagination(
+  options: UseFetchPaginationOptions
+): UseFetchPaginationReturnValue {
   const {
     total,
     page,

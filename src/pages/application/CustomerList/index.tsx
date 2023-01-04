@@ -4,7 +4,7 @@ import {
   Ref,
   onBeforeMount,
   unref,
-  computed,
+  watch,
   PropType,
   toRefs
 } from 'vue';
@@ -13,10 +13,12 @@ import FixedCard, { FixedCardSlots } from '@/components/custom/FixedCard';
 import { LoadingEmptyWrapper } from '@/components/business';
 import { NPagination, NGrid, NGi, NButton, NModal, NInput } from 'naive-ui';
 import { CustomerCard, Customer } from './components';
-import { useRenderIcon, usePagination } from '@/composables';
+import { useRenderIcon } from '@/composables';
+import { useFetchPagination } from '@/composables/dataTable';
 import { fetchCustomerList, setCustomer } from '@/service/api';
-import { MaybeRef } from '@vueuse/core';
 import { useApiStore } from '@/stores';
+import { useAPTerm } from '@/utils';
+import { refDebounced } from '@vueuse/core';
 
 type Responsive = InstanceType<typeof NGrid>['$props']['responsive'];
 
@@ -34,49 +36,68 @@ export default defineComponent({
     const total = ref(0);
     const modalShow = ref(false);
     const searchValue = ref('');
+    const debounced = refDebounced(searchValue, 300);
 
     const { responsive } = toRefs(props);
-
-    const filterData = computed(() => {
-      return dataBase.value.filter(handleFilter(searchValue));
-    });
-
-    onBeforeMount(() => {
-      fetchCustomerData(0, 0);
-    });
 
     const {
       currentPage,
       currentPageSize,
-      onPageUpdate,
-      opPageSizeUpdate,
-      currentData,
       loading,
       loadingStart,
-      loadingEnd
-    } = usePagination<Customer>(filterData, {
+      loadingEnd,
+      onPageUpdate,
+      opPageSizeUpdate
+    } = useFetchPagination({
       total,
-      page: 1,
       pageSize: 20
     });
 
-    function handleFilter(
-      filter: MaybeRef<string>
-    ): (arg: ApiResponse.CustomItem) => boolean {
-      const re = new RegExp(unref(filter), 'i');
-      return (item) => re.test(item.Customer);
+    onBeforeMount(() => {
+      fetchCustomerData({ From: 0, Size: currentPageSize.value });
+    });
+
+    type CustomerRequest = ApiRequest.CustomerRequest;
+    watch(
+      [currentPage, currentPageSize, debounced],
+      (newArr, oldArr, onCleanup) => {
+        const controller = new AbortController();
+        const keys: Array<keyof CustomerRequest> = ['From', 'Size', 'Filter'];
+        fetchCustomerData<ApiRequest.CustomerRequest>(
+          handleParam(keys, newArr),
+          controller
+        );
+        onCleanup(() => {
+          controller.abort();
+        });
+      }
+    );
+
+    function handleParam(
+      keys: Array<keyof CustomerRequest>,
+      arr: [number, number, string | undefined]
+    ) {
+      return keys.reduce<CustomerRequest>((obj, item, index) => {
+        if (item === 'From') {
+          obj[item] = unref(useAPTerm(arr[0] as number, arr[1] as number));
+        } else {
+          obj[item] = arr[index];
+        }
+        return obj;
+      }, {} as CustomerRequest);
     }
 
-    async function fetchCustomerData(
-      from: MaybeRef<number> = 0,
-      size: MaybeRef<number> = 0
+    async function fetchCustomerData<T>(
+      param: T,
+      controller?: AbortController
     ) {
       loadingStart();
       const [err, data] = await fetchCustomerList<
+        T,
         ApiResponse.CommonData<Customer>
-      >(unref(from), unref(size));
+      >(param, { signal: controller?.signal });
       if (data) {
-        total.value = data.Total;
+        total.value = data.Total || 0;
         dataBase.value = data.Items || [];
       }
       loadingEnd();
@@ -89,7 +110,7 @@ export default defineComponent({
       );
       if (data) {
         modalShow.value = false;
-        fetchCustomerData(0, 0);
+        // fetchCustomerData(0, 0);
       }
     }
 
@@ -99,7 +120,7 @@ export default defineComponent({
           default: ({ contentHeight }: FixedCardSlots) => (
             <LoadingEmptyWrapper
               loading={loading.value}
-              empty={!filterData.value.length}
+              empty={!dataBase.value.length}
               height={contentHeight.value}
             >
               <div class="flex items-center justify-between sticky top-0 z-20 bg-white dark:bg-[#18181c]">
@@ -133,16 +154,16 @@ export default defineComponent({
                 y-gap="8"
                 class="mt-3 mb-8 z-10"
               >
-                {currentData.value.map((item, index) => (
+                {dataBase.value.map((item, index) => (
                   <NGi key={item.CustomerId}>
                     <CustomerCard
                       value={item}
                       onUpdate:value={(value: Customer) => {
                         dataBase.value.splice(index, 1, value);
-                        apiStore.fetchCustomer(0, 0, { reload: true });
+                        apiStore.fetchCustomer({}, { reload: true });
                       }}
                       onDelete={() => {
-                        fetchCustomerData(0, 0);
+                        // fetchCustomerData(0, 0);
                       }}
                     />
                   </NGi>

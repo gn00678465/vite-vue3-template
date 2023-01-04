@@ -9,6 +9,14 @@ declare namespace ApiAuth {
   type UserInfo = Auth.UserInfo;
 }
 
+declare namespace ApiRequest {
+  interface CustomerRequest {
+    From: number;
+    Size: number;
+    Filter?: string;
+  }
+}
+
 declare namespace ApiResponse {
   type CommonItem = {
     ID: number;

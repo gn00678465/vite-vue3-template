@@ -1,4 +1,5 @@
 import { request } from '../request';
+import type { AxiosRequestConfig } from 'axios';
 
 /** All */
 export function fetchApplicationForm<T>(from: number, size: number) {
@@ -57,8 +58,8 @@ export function fetchModelsList<T>() {
 }
 
 /** 客戶 */
-export function fetchCustomerList<T>(from: number, size: number) {
-  return request.get<T>(`/api/web/customer/list?from=${from}&size=${size}`);
+export function fetchCustomerList<T, K>(data: T, config?: AxiosRequestConfig) {
+  return request.post<K>(`/api/web/customer/list`, data, config);
 }
 /** 新增客戶 */
 export function setCustomer<T, K>(data: T) {

@@ -1,4 +1,4 @@
-import { ref, computed, unref, Ref, watch, watchEffect } from 'vue';
+import { ref, computed, unref, Ref, watchEffect } from 'vue';
 import {
   MaybeRef,
   useOffsetPagination,

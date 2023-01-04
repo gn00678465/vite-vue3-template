@@ -10,6 +10,8 @@ export const DEFAULT_ERROR_CODE = 'DEFAULT';
 
 export const DEFAULT_ERROR_MSG = '未知的錯誤';
 
+export const CANCELED_CODE = 'ERR_CANCELED';
+
 // 401 錯誤碼
 /** token 過期 */
 export const TOKEN_EXPIRED_CODE = 'AccessToken expired';

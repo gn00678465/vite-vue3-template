@@ -6,7 +6,8 @@ import {
   NETWORK_ERROR_MSG,
   DEFAULT_ERROR_CODE,
   DEFAULT_ERROR_MSG,
-  ERROR_STATUS_CODE
+  ERROR_STATUS_CODE,
+  CANCELED_CODE
 } from '@/config';
 import { execStrategyActions } from '../common';
 import { useI18n, useNotification } from '@/hooks';
@@ -35,6 +36,15 @@ export function handleNetworkError(axiosErr: AxiosError) {
         Object.assign(error, {
           code: REQUEST_TIMEOUT_CODE,
           message: REQUEST_TIMEOUT_MSG
+        });
+      }
+    ],
+    [
+      axiosErr.code === CANCELED_CODE,
+      () => {
+        Object.assign(error, {
+          code: CANCELED_CODE,
+          message: ''
         });
       }
     ],
