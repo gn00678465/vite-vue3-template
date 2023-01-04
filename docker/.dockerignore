@@ -1,0 +1,13 @@
+.DS_Store
+**/node_modules
+**/dist
+
+# test
+coverage/**
+
+localhost+3-key.pem
+localhost+3.pem
+
+# Editor directories and files
+yarn.lock
+pnpm-lock.yaml
