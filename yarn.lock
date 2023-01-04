@@ -444,7 +444,7 @@
   dependencies:
     "@iconify/types" "^2.0.0"
 
-"@intlify/bundle-utils@^3.2.1":
+"@intlify/bundle-utils@^3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@intlify/bundle-utils/-/bundle-utils-3.4.0.tgz#72558611f4b223a6791f591363dc48a4bcacdf70"
   integrity sha512-2UQkqiSAOSPEHMGWlybqWm4G2K0X+FyYho5AwXz6QklSX1EY5EDmOSxZmwscn2qmKBnp6OYsme5kUrnN9xrWzQ==
@@ -498,17 +498,23 @@
   resolved "https://registry.yarnpkg.com/@intlify/shared/-/shared-9.3.0-beta.10.tgz#e1e6c99b0f0a039e8fadc319b93314056f8e992e"
   integrity sha512-h93uAanbAt/XgjDHclrVB7xix6r7Uz11wx0iGNOCdHP7aA2LCJjUT3uNbekJjjbo+Fl5jzTSJZdm2SexzoqhRA==
 
-"@intlify/vite-plugin-vue-i18n@^6.0.3":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@intlify/vite-plugin-vue-i18n/-/vite-plugin-vue-i18n-6.0.3.tgz#57a6900de02a9829e52b16bf072768534c7664ef"
-  integrity sha512-6SgNzPAOCR90wvt368lKzi7f/5ZEWJn22UCGvhFsP3XvKqlF3cVzojahgQ6o+LTdCkExeM6wPgd+haFf28E9VQ==
+"@intlify/unplugin-vue-i18n@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@intlify/unplugin-vue-i18n/-/unplugin-vue-i18n-0.8.1.tgz#e472981da044d85b910521ee0f9e15382cba9a09"
+  integrity sha512-BhigujPmP6JL1FSxmpogCaL+REozncHCVkJuUnefz4GWBu3X+pRe5O7PeJn8/g+Iml2ieQJz4ISPMmEbuGQjqQ==
   dependencies:
-    "@intlify/bundle-utils" "^3.2.1"
+    "@intlify/bundle-utils" "^3.4.0"
     "@intlify/shared" next
     "@rollup/pluginutils" "^4.2.0"
+    "@vue/compiler-sfc" "^3.2.45"
     debug "^4.3.1"
     fast-glob "^3.2.5"
+    js-yaml "^4.1.0"
+    json5 "^2.2.0"
+    pathe "^1.0.0"
+    picocolors "^1.0.0"
     source-map "0.6.1"
+    unplugin "^1.0.0"
 
 "@intlify/vue-devtools@9.2.2":
   version "9.2.2"
@@ -1023,7 +1029,7 @@
     "@vue/compiler-core" "3.2.45"
     "@vue/shared" "3.2.45"
 
-"@vue/compiler-sfc@3.2.45", "@vue/compiler-sfc@^3.2.38", "@vue/compiler-sfc@^3.2.40":
+"@vue/compiler-sfc@3.2.45", "@vue/compiler-sfc@^3.2.38", "@vue/compiler-sfc@^3.2.40", "@vue/compiler-sfc@^3.2.45":
   version "3.2.45"
   resolved "https://registry.yarnpkg.com/@vue/compiler-sfc/-/compiler-sfc-3.2.45.tgz#7f7989cc04ec9e7c55acd406827a2c4e96872c70"
   integrity sha512-1jXDuWah1ggsnSAOGsec8cFjT/K6TMZ0sPL3o3d84Ft2AYZi2jWJgRMjw4iaK0rBfA89L5gw427H4n1RZQBu6Q==
@@ -3026,6 +3032,11 @@ json-stringify-safe@~5.0.1:
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==
 
+json5@^2.2.0:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
+  integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
+
 json5@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.1.tgz#655d50ed1e6f95ad1a3caababd2b0efda10b395c"
@@ -3469,6 +3480,11 @@ pathe@^0.3.0:
   version "0.3.9"
   resolved "https://registry.yarnpkg.com/pathe/-/pathe-0.3.9.tgz#4baff768f37f03e3d9341502865fb93116f65191"
   integrity sha512-6Y6s0vT112P3jD8dGfuS6r+lpa0qqNrLyHPOwvXMnyNTQaYiwgau2DP3aNDsR13xqtGj7rrPo+jFUATpU6/s+g==
+
+pathe@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/pathe/-/pathe-1.0.0.tgz#135fc11464fc57c84ef93d5c5ed21247e24571df"
+  integrity sha512-nPdMG0Pd09HuSsr7QOKUXO2Jr9eqaDiZvDwdyIhNG5SHYujkQHYKDfGQkulBxvbDHz8oHLsTgKN86LSwYzSHAg==
 
 pathval@^1.1.1:
   version "1.1.1"

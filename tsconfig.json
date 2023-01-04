@@ -19,7 +19,7 @@
     "types": [
       "unplugin-icons/types/vue",
       "unplugin-vue-macros/macros-global",
-      "@intlify/vite-plugin-vue-i18n/client",
+      "@intlify/unplugin-vue-i18n/messages",
       "vitest/globals"
     ]
   },
