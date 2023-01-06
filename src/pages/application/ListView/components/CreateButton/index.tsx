@@ -3,11 +3,14 @@ import { NButton, NDropdown } from 'naive-ui';
 import type { DropdownOption } from 'naive-ui';
 import { Icon } from '@iconify/vue';
 import { Types } from '../../utils';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'CreateButton',
   emits: ['on-select'],
   setup(props, { emit }) {
+    const { t } = useI18n();
+
     const options: DropdownOption[] = [
       {
         label: '正式申請單',
@@ -17,10 +20,6 @@ export default defineComponent({
         label: 'POC 申請單',
         key: 'POC'
       }
-      // {
-      //   label: '功能模組申請單',
-      //   key: 'FunctionModule'
-      // }
     ];
 
     function handleSelect(key: string | number) {
@@ -34,7 +33,7 @@ export default defineComponent({
             <NButton type="primary">
               {{
                 icon: () => <Icon icon="mdi:plus" />,
-                default: () => <p>新建申請單</p>
+                default: () => <p>{t('operate.createNew.form')}</p>
               }}
             </NButton>
           )

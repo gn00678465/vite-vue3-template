@@ -1,8 +1,8 @@
 import type { VNodeChild } from 'vue';
 import type { DataTableColumns } from 'naive-ui';
 import {
-  EnumApplicationFormType,
-  EnumApplicationFormState,
+  EnumLicenseFormType,
+  EnumLicenseFormState,
   EnumFunctionModule
 } from '@/enum';
 import { format, utcToZonedTime } from 'date-fns-tz';
@@ -11,8 +11,8 @@ import { renderState } from './render';
 import { stateDefault } from './fetch';
 import { useI18n } from '@/hooks';
 
-export type Types = keyof typeof EnumApplicationFormType;
-export type States = keyof typeof EnumApplicationFormState;
+export type Types = keyof typeof EnumLicenseFormType;
+export type States = keyof typeof EnumLicenseFormState;
 export type Modules = keyof typeof EnumFunctionModule;
 
 export interface ApplyModule {
@@ -90,7 +90,7 @@ export function createColumns({
       title: t('column.Type'),
       key: 'Type',
       render(rowData) {
-        return EnumApplicationFormType[rowData.Type];
+        return t(EnumLicenseFormType[rowData.Type]) + '申請單';
       }
     },
     {

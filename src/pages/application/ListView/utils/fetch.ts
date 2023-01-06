@@ -19,23 +19,23 @@ export const fetchApi = ref(fetchApplicationForm);
 
 export const fetchesObj = {
   WaitApproval: {
-    label: t(`common.waitApproval`),
+    label: t(`components.licenseForm.present.state.ManagerCheck`),
     api: fetchApplicationFormWaitingApproval
   },
   WaitSN: {
-    label: t(`common.waitSN`),
+    label: t(`components.licenseForm.present.state.FinalCheck`),
     api: fetchApplicationWaitSN
   },
   Finish: {
-    label: t(`common.finish`),
+    label: t(`common.past.finish`),
     api: fetchApplicationFinish
   },
   Revoke: {
-    label: t(`common.revoke`),
+    label: t(`common.past.revoke`),
     api: fetchApplicationFormCancel
   },
   Reject: {
-    label: t(`common.reject`),
+    label: t(`common.past.reject`),
     api: fetchApplicationFormReject
   }
 };

@@ -2,7 +2,8 @@ import { defineComponent, ref, Ref, computed, PropType } from 'vue';
 import { NSelect, SelectOption, NDivider } from 'naive-ui';
 import { Icon } from '@iconify/vue';
 import { useAuthStore } from '@/stores';
-import { useI18n, useNotification } from '@/hooks';
+import { useNotification } from '@/hooks';
+import { useI18n } from 'vue-i18n';
 import { messages } from '../../../locales';
 
 type Column = '' | 'Role' | 'Department';

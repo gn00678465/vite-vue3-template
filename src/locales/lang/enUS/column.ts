@@ -6,7 +6,7 @@ export default {
   ApplyModule: 'Applied Module',
   State: 'State',
   CreateTime: 'Created Time',
-  name: 'Name | User Name',
+  userName: 'User Name',
   department: 'Department',
   role: 'Role'
 };

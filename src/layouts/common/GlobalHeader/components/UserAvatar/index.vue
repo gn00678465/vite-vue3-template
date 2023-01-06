@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'UserAvatar'
+};
+</script>
+
 <script setup lang="ts">
 import { computed } from 'vue';
 import { NDropdown } from 'naive-ui';
@@ -5,11 +11,10 @@ import type { DropdownOption } from 'naive-ui';
 import HoverContainer from '@/components/common/HoverContainer.vue';
 import { useRenderIcon } from '@/composables';
 import { useAuthStore } from '@/stores';
-import { useI18n, useSwal } from '@/hooks';
+import { useSwal } from '@/hooks';
 import { execStrategyActions, localStorage } from '@/utils';
 import { useMsal } from './utils';
-
-defineOptions({ name: 'UserAvatar' });
+import { useI18n } from 'vue-i18n';
 
 const { userInfo, resetAuthStore } = useAuthStore();
 const { instance } = useMsal();

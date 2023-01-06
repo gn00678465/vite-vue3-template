@@ -2,7 +2,7 @@ import { defineComponent, computed } from 'vue';
 import SystemLogo from '@/components/common/SystemLogo.vue';
 import { useAppInfo } from '@/composables';
 import { useAppStore } from '@/stores';
-import { useI18n } from '@/hooks';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'GlobalLogo',

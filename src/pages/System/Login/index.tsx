@@ -7,7 +7,7 @@ import { NCard, NGradientText, NSwitch } from 'naive-ui';
 import { Icon } from '@iconify/vue';
 import { PwdLogin, OAuth } from './components';
 import SystemLogo from '@/components/common/SystemLogo.vue';
-import { useI18n } from '@/hooks';
+import { useI18n } from 'vue-i18n';
 
 interface LoginModule {
   key: EnumType.LoginModuleKey;

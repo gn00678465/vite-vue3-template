@@ -20,8 +20,7 @@ import {
 import { ApplyModule, dateToUtcString, dateToUTCTime } from '../../utils';
 import { execStrategyActions } from '@/utils';
 import { watchOnce, MaybeRef } from '@vueuse/core';
-import { useI18n } from '@/hooks';
-import { messages } from '../../../locales';
+import { useI18n } from 'vue-i18n';
 
 type ValidationStatus = InstanceType<
   typeof NFormItem
@@ -53,7 +52,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const { t } = useI18n({ messages });
+    const { t } = useI18n();
 
     const moduleDate = ref<Map<number, number>>(new Map([]));
     const { value, defaultExpiredDate, list, type, disabledModule } =
@@ -198,7 +197,7 @@ export default defineComponent({
           <NCheckbox
             size="large"
             value={item.ID}
-            label={t(`module.${item.Name}`)}
+            label={t(`components.licenseForm.modules.${item.Name}`)}
           />
           {module.value.includes(item.ID) && isFormal.value && (
             <NFormItemGi show-feedback={false} show-label={false}>
@@ -227,7 +226,7 @@ export default defineComponent({
           <NCheckbox
             size="large"
             value={item.ID}
-            label={t(`module.${item.Name}`)}
+            label={t(`components.licenseForm.modules.${item.Name}`)}
           />
         </NGi>
       ));

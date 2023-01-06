@@ -17,19 +17,17 @@ import {
 } from './utils';
 import { useRenderIcon, useRouterPush } from '@/composables';
 import {
-  useFetchTableData,
+  useFetchPagination,
   useDataTableDefProps
 } from '@/composables/dataTable';
-import { useI18n } from '@/hooks';
+import { useI18n } from 'vue-i18n';
 import { useApiStore } from '@/stores';
-import { messages } from '../locales';
 import { EnumFunctionModule } from '@/enum';
 
 export default defineComponent({
   name: 'ApplicationFormListView',
   setup() {
     const { t } = useI18n();
-    const { t: tl } = useI18n({ messages });
     const apiStore = useApiStore();
     const { routerPush } = useRouterPush(true);
     const { pushCreateForm, pushSelectForm } =
@@ -61,7 +59,7 @@ export default defineComponent({
       loadingEnd,
       onPageUpdate,
       opPageSizeUpdate
-    } = useFetchTableData({
+    } = useFetchPagination({
       total,
       pageSize: 20,
       onPageChange: fetchData,
@@ -128,7 +126,12 @@ export default defineComponent({
             size: 'small'
           },
           {
-            default: () => tl(`module.${EnumFunctionModule[item.Module]}`)
+            default: () =>
+              t(
+                `components.licenseForm.modules.${
+                  EnumFunctionModule[item.Module]
+                }`
+              )
           }
         );
       });

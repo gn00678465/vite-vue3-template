@@ -13,7 +13,7 @@ export type FormValue = {
   Images?: string;
 };
 
-export type FormType = keyof typeof import('@/enum').EnumApplicationFormType;
+export type FormType = keyof typeof import('@/enum').EnumLicenseFormType;
 
 export type OmitPOC<T> = Omit<T, 'ExpiredDate' | 'Images'>;
 export type OmitFormal<T> = Omit<T, 'TestDays' | 'PerSeat' | 'Images'>;

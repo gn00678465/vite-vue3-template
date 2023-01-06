@@ -13,7 +13,7 @@ import {
   UserInfo
 } from './utils';
 import {
-  useFetchTableData,
+  useFetchPagination,
   useDataTableDefProps
 } from '@/composables/dataTable';
 import { assoc, pipe } from 'ramda';
@@ -46,7 +46,7 @@ export default defineComponent({
       loadingEnd,
       onPageUpdate,
       opPageSizeUpdate
-    } = useFetchTableData({
+    } = useFetchPagination({
       total,
       pageSize: 20,
       onPageChange: fetchData,

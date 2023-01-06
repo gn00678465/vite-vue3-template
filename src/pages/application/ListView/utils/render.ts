@@ -1,6 +1,6 @@
 import { h, VNodeChild } from 'vue';
 import { NTag } from 'naive-ui';
-import { EnumApplicationFormState } from '@/enum';
+import { EnumLicenseFormState } from '@/enum';
 import type { ApplicationTableData } from './columns';
 import { execStrategyActions } from '@/utils';
 
@@ -11,10 +11,10 @@ const renderTag = (type: TagPropType, content: string) =>
 
 export function renderState(rowData: ApplicationTableData) {
   return rowData.State === 'Cancel' || rowData.State === 'Reject'
-    ? renderTag('error', EnumApplicationFormState[rowData.State])
+    ? renderTag('error', EnumLicenseFormState[rowData.State])
     : rowData.State === 'ManagerCheck' || rowData.State === 'FinalCheck'
-    ? renderTag('info', EnumApplicationFormState[rowData.State])
-    : renderTag('success', EnumApplicationFormState[rowData.State]);
+    ? renderTag('info', EnumLicenseFormState[rowData.State])
+    : renderTag('success', EnumLicenseFormState[rowData.State]);
 }
 
 export function renderExpand(rowData: ApplicationTableData) {

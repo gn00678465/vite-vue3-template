@@ -81,6 +81,8 @@ export default defineComponent({
         if (item === 'From') {
           obj[item] = unref(useAPTerm(arr[0] as number, arr[1] as number));
         } else {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           obj[item] = arr[index];
         }
         return obj;

@@ -1,10 +1,10 @@
-export enum EnumApplicationFormType {
-  'Formal' = '正式申請單',
-  'POC' = 'POC 申請單',
-  'FunctionModule' = '功能模組申請單'
+export enum EnumLicenseFormType {
+  'Formal' = 'components.licenseForm.type.Formal',
+  'POC' = 'components.licenseForm.type.POC',
+  'FunctionModule' = 'components.licenseForm.type.FunctionModule'
 }
 
-export enum EnumApplicationFormState {
+export enum EnumLicenseFormState {
   'Cancel' = '已撤回',
   'Reject' = '已駁回',
   'ManagerCheck' = '業務主管審核中',

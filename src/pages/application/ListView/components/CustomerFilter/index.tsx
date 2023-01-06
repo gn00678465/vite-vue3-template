@@ -19,7 +19,7 @@ import {
 import { useRenderIcon, usePagination } from '@/composables';
 import { useApiStore } from '@/stores';
 import { LoadingEmptyWrapper } from '@/components/business';
-import { useI18n } from '@/hooks';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'CustomerFilter',
@@ -102,8 +102,7 @@ export default defineComponent({
             <NButton type="info" secondary>
               {{
                 icon: useRenderIcon({ icon: 'mdi:filter-variant' }),
-                default: () =>
-                  t('component.filter.filterBy', { msg: t('column.Customer') })
+                default: () => t('operate.filterBy.customer')
               }}
             </NButton>
           ),

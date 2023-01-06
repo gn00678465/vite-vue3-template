@@ -1,24 +1,35 @@
 export default {
-  save: 'Save',
+  present: {
+    reject: 'Reject',
+    revoke: 'Revoke',
+    cancel: 'Cancel',
+    save: 'Save',
+    create: 'create',
+    finish: 'Finish'
+  },
+  past: {
+    reject: 'Rejected',
+    revoke: 'Revoked',
+    cancel: 'Cancelled',
+    save: 'Saved',
+    create: 'created',
+    finish: 'Finished'
+  },
+  state: 'State',
+  filter: 'Filter',
   edit: 'Edit',
   view: 'View',
   detail: 'Detail',
   ok: 'OK',
-  cancel: 'Cancel',
   notSet: 'Not set',
-  reject: 'Reject | Rejected',
-  revoke: 'Revoke | Revoked',
   approval: 'Approval',
   submit: 'Submit',
   preview: 'Preview',
-  sn: 'SN | Serial Number',
-  upload: 'Upload | Upload {msg}',
-  download: 'Download | Download {msg}',
+  sn: 'SN',
+  upload: 'Upload',
+  download: 'Download',
   attachFile: 'Attach File',
-  create: 'Create | Create',
-  finish: 'Finish',
-  waitSN: 'Wait for serial number',
-  waitApproval: 'Wait for approval',
-  filter: 'Filter',
-  reset: 'Reset'
+  reset: 'Reset',
+  form: 'Form',
+  analysis: 'Analysis'
 };

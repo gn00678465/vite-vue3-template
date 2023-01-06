@@ -7,7 +7,7 @@ export default {
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { NSpin } from 'naive-ui';
-import { useI18n } from '@/hooks';
+import { useI18n } from 'vue-i18n';
 
 interface Props {
   loading: boolean;

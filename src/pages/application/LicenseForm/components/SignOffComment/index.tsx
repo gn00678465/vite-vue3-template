@@ -9,7 +9,7 @@ import {
   FormInst,
   FormValidationError
 } from 'naive-ui';
-import { useI18n } from '@/hooks';
+import { useI18n } from 'vue-i18n';
 import { execStrategyActions } from '@/utils';
 import { signOffRules, commonRules, FormValue } from './utils';
 
@@ -92,7 +92,7 @@ export default defineComponent({
             on-update:value={handleChange}
           >
             <NRadio value="approval">{t('common.approval')}</NRadio>
-            <NRadio value="reject">{t('common.reject')}</NRadio>
+            <NRadio value="reject">{t('common.present.reject')}</NRadio>
           </NRadioGroup>
         </NFormItem>
         <NFormItem path="comment" label="簽核意見">
@@ -110,7 +110,7 @@ export default defineComponent({
             {t('common.submit')}
           </NButton>
           <NButton round onClick={handleCancel}>
-            {t('common.cancel')}
+            {t('common.present.cancel')}
           </NButton>
         </div>
       </NForm>

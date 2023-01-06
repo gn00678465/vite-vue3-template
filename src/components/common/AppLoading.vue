@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAppInfo } from '@/composables';
 import { localStorage } from '@/utils';
-import { useI18n } from '@/hooks';
+import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const { title } = useAppInfo();

@@ -1,15 +1,20 @@
-import { getCurrentInstance } from 'vue';
-import * as vueI18n from 'vue-i18n';
-import type { VueI18nTranslation, VueI18nOptions } from 'vue-i18n';
 import { i18n } from '@/plugins';
 
-type ReturnType = {
-  t: VueI18nTranslation;
+type I18nGlobalTranslation = {
+  (key: string): string;
+  (key: string, locale: string): string;
+  (key: string, locale: string, list: unknown[]): string;
+  (key: string, locale: string, named: Record<string, unknown>): string;
+  (key: string, list: unknown[]): string;
+  (key: string, named: Record<string, unknown>): string;
 };
 
-export function useI18n(opt?: VueI18nOptions): ReturnType {
-  const isInSetup = !!getCurrentInstance();
-  const { t, ...methods } = isInSetup ? vueI18n.useI18n(opt) : i18n.global;
+type ReturnType = {
+  t: I18nGlobalTranslation;
+};
+
+export function useI18n(): ReturnType {
+  const { t, ...methods } = i18n.global;
 
   return {
     ...methods,

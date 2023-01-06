@@ -37,10 +37,13 @@ import {
   omitPOC,
   ApplyModule
 } from './utils';
-import { useI18n, useNotification, useSwal, useLoading } from '@/hooks';
+import { useNotification, useSwal, useLoading } from '@/hooks';
 import { execStrategyActions } from '@/utils';
 import { fetchSpecificApplicationForm } from '@/service/api';
-import { messages } from '../locales';
+import { useI18n } from 'vue-i18n';
+import { EnumLicenseFormType } from '@/enum';
+
+type FormType = keyof typeof EnumLicenseFormType;
 
 export default defineComponent({
   name: 'LicenseForm',
@@ -64,7 +67,6 @@ export default defineComponent({
     const apiStore = useApiStore();
     const { removeTab } = useTabStore();
     const { t } = useI18n();
-    const { t: tl } = useI18n({ messages });
     const { state, send } = useMachine(initStateMachine);
     const { createErrorNotify, createSuccessNotify } = useNotification({
       duration: 1500
@@ -357,7 +359,7 @@ export default defineComponent({
                 label-width="auto"
               >
                 <h3 class="text-3xl font-semibold text-center mt-5">
-                  {tl(formType.value)}申請單
+                  {t(EnumLicenseFormType[formType.value as FormType])}申請單
                 </h3>
                 {/* basic */}
                 {!isCreate.value && (
@@ -367,7 +369,7 @@ export default defineComponent({
                         actions: () =>
                           canRevoke.value && (
                             <NButton round type="error" onClick={handleRevoke}>
-                              {t('common.revoke')}
+                              {t('common.present.revoke')}
                             </NButton>
                           )
                       }}
@@ -451,7 +453,7 @@ export default defineComponent({
                       {t('common.submit')}
                     </NButton>
                     <NButton round onClick={handleCancel}>
-                      {t('common.cancel')}
+                      {t('common.present.cancel')}
                     </NButton>
                   </div>
                 )}

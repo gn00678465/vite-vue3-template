@@ -1,7 +1,6 @@
 import { defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import { useI18n } from '@/hooks';
-import { messages } from '../../../locales';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'SignOffState',
@@ -13,9 +12,7 @@ export default defineComponent({
   },
   setup(props, { slots }) {
     const route = useRoute();
-    const { t } = useI18n({
-      messages: messages
-    });
+    const { t } = useI18n();
 
     return () => (
       <div class="flex items-center justify-between">
@@ -24,9 +21,10 @@ export default defineComponent({
             <p>單號： {route.params.id}</p>
           </li>
           <li>
-            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-            {/* @ts-ignore */}
-            <p>狀態： {t(props.state, 1)}</p>
+            <p>
+              {t('common.state')}：{' '}
+              {t(`components.licenseForm.present.state.${props.state}`, 1)}
+            </p>
           </li>
         </ul>
         {slots.actions?.()}

@@ -6,7 +6,7 @@ import { InteractionType } from '@azure/msal-browser';
 import { useMsal } from './utils';
 import { loginRequest } from '@/config';
 import { useAuthStore } from '@/stores';
-import { useI18n } from '@/hooks';
+import { useI18n } from 'vue-i18n';
 import { localStorage } from '@/utils';
 
 export default defineComponent({

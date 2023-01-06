@@ -10,8 +10,7 @@ import { NCollapseTransition, NTimeline, NTimelineItem } from 'naive-ui';
 import { pipe, curry, assoc } from 'ramda';
 import { utcToZonedTime, format } from 'date-fns-tz';
 import { fetchSpecificFormRecord } from '@/service/api';
-import { useI18n } from '@/hooks';
-import { messages } from '../../../locales';
+import { useI18n } from 'vue-i18n';
 
 enum EnumState {
   'Cancel' = 'Cancel',
@@ -58,10 +57,8 @@ export default defineComponent({
   setup(props, { attrs }) {
     const show = ref(true);
     const record = ref<FormState[]>([]);
-    const { ApplicationFormId, CreateTime, creator, State } = toRefs(props);
-    const { t } = useI18n({
-      messages: messages
-    });
+    const { ApplicationFormId, CreateTime, creator } = toRefs(props);
+    const { t } = useI18n();
 
     const isSigned = computed(() => !!record.value.length);
 
@@ -125,7 +122,8 @@ export default defineComponent({
             {{
               header: () => (
                 <p>
-                  {t('Create')}：{creator.value}
+                  {t('components.licenseForm.past.state.Create')}：
+                  {creator.value}
                 </p>
               )
             }}
@@ -142,9 +140,8 @@ export default defineComponent({
               {{
                 header: () => (
                   <p>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
-                    {t(item.State, 2)}：{item.Name}
+                    {t(`components.licenseForm.past.state.${item.State}`)}：
+                    {item.Name}
                   </p>
                 ),
                 default: () => item.Reason

@@ -27,11 +27,11 @@ export const useApiStore = defineStore('api-store', () => {
   });
 
   async function fetchCustomer(param = {}, options: { reload?: boolean } = {}) {
-    const { From = 0, Size = 0 } = param as ApiRequest.CustomRequest;
+    const { From = 0, Size = 0 } = param as ApiRequest.CustomerRequest;
     const { reload = false } = options;
     if (!reload && !!customerList.Items.length) return;
     const [err, data] = await fetchCustomerList<
-      ApiRequest.CustomRequest,
+      ApiRequest.CustomerRequest,
       ApiResponse.CommonData<ApiResponse.CustomItem>
     >({ From, Size });
     if (data) {
