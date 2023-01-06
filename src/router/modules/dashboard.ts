@@ -8,7 +8,8 @@ const dashboard: AuthRoute.Route = {
   meta: {
     title: '儀錶板',
     icon: 'mdi:view-dashboard',
-    order: 0
+    order: 0,
+    hide: true
   },
   children: [
     {
