@@ -11,7 +11,9 @@ export const useThemeStore = defineStore('theme-store', () => {
   const tab = reactive({ isCache: true, mode: 'chrome' });
   const header = reactive({
     hight: 56,
-    locales: false
+    locales: {
+      enabled: true
+    }
   });
   const themeColor = ref<string>(themeSetting.themeColor);
 
