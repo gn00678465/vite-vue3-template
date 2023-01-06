@@ -13,7 +13,7 @@ declare namespace ApiRequest {
   interface CustomerRequest {
     From: number;
     Size: number;
-    Filter?: string;
+    Filter?: string | null;
   }
 }
 

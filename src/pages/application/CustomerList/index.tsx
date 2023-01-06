@@ -6,7 +6,8 @@ import {
   unref,
   watch,
   PropType,
-  toRefs
+  toRefs,
+  computed
 } from 'vue';
 import { omit } from 'ramda';
 import FixedCard, { FixedCardSlots } from '@/components/custom/FixedCard';
@@ -35,7 +36,7 @@ export default defineComponent({
     const dataBase: Ref<Customer[]> = ref([]);
     const total = ref(0);
     const modalShow = ref(false);
-    const searchValue = ref('');
+    const searchValue = ref<string | null>(null);
     const debounced = refDebounced(searchValue, 300);
 
     const { responsive } = toRefs(props);
@@ -57,14 +58,18 @@ export default defineComponent({
       fetchCustomerData({ From: 0, Size: currentPageSize.value });
     });
 
+    const currentFrom = computed(() =>
+      unref(useAPTerm(currentPage, currentPageSize))
+    );
+
     type CustomerRequest = ApiRequest.CustomerRequest;
     watch(
-      [currentPage, currentPageSize, debounced],
+      [currentFrom, currentPageSize, debounced],
       (newArr, oldArr, onCleanup) => {
         const controller = new AbortController();
         const keys: Array<keyof CustomerRequest> = ['From', 'Size', 'Filter'];
-        fetchCustomerData<ApiRequest.CustomerRequest>(
-          handleParam(keys, newArr),
+        fetchCustomerData<CustomerRequest>(
+          handleParam<CustomerRequest>(keys, newArr),
           controller
         );
         onCleanup(() => {
@@ -73,29 +78,23 @@ export default defineComponent({
       }
     );
 
-    function handleParam(
-      keys: Array<keyof CustomerRequest>,
-      arr: [number, number, string | undefined]
+    function handleParam<T>(
+      keys: Array<keyof T>,
+      arr: [number, number, string | null]
     ) {
-      return keys.reduce<CustomerRequest>((obj, item, index) => {
-        if (item === 'From') {
-          obj[item] = unref(useAPTerm(arr[0] as number, arr[1] as number));
-        } else {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          obj[item] = arr[index];
-        }
+      return keys.reduce((obj, item, index) => {
+        obj[item] = arr[index];
         return obj;
-      }, {} as CustomerRequest);
+      }, {} as Record<keyof T, string | null | number>);
     }
 
     async function fetchCustomerData<T>(
-      param: T,
+      param: Record<keyof T, T[keyof T]>,
       controller?: AbortController
     ) {
       loadingStart();
       const [err, data] = await fetchCustomerList<
-        T,
+        Record<keyof T, T[keyof T]>,
         ApiResponse.CommonData<Customer>
       >(param, { signal: controller?.signal });
       if (data) {
@@ -112,7 +111,11 @@ export default defineComponent({
       );
       if (data) {
         modalShow.value = false;
-        // fetchCustomerData(0, 0);
+        fetchCustomerData({
+          From: unref(currentFrom),
+          Size: unref(currentPageSize),
+          Filter: unref(searchValue)
+        });
       }
     }
 
@@ -128,11 +131,15 @@ export default defineComponent({
               <div class="flex items-center justify-between sticky top-0 z-20 bg-white dark:bg-[#18181c]">
                 <NInput
                   autosize
+                  clearable
                   class="w-[300px]"
                   value={searchValue.value}
                   placeholder="請輸入篩選條件"
                   on-update:value={(value: string) => {
-                    searchValue.value = value;
+                    searchValue.value = value || null;
+                  }}
+                  on-clear={() => {
+                    searchValue.value = null;
                   }}
                 >
                   {{ prefix: useRenderIcon({ icon: 'mdi:magnify' }) }}
@@ -165,7 +172,15 @@ export default defineComponent({
                         apiStore.fetchCustomer({}, { reload: true });
                       }}
                       onDelete={() => {
-                        // fetchCustomerData(0, 0);
+                        if (unref(total) - 1 > currentFrom.value) {
+                          fetchCustomerData({
+                            From: unref(currentFrom),
+                            Size: unref(currentPageSize),
+                            Filter: unref(searchValue)
+                          });
+                        } else {
+                          currentPage.value = currentPage.value - 1;
+                        }
                       }}
                     />
                   </NGi>
