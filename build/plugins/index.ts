@@ -3,7 +3,6 @@ import VueJsx from '@vitejs/plugin-vue-jsx';
 import { html } from './html';
 import VueMacros from 'unplugin-vue-macros/vite';
 import unplugin from './unplugin';
-import vitestConfig from './vitest.config';
 import { i18n } from './i18n';
 import PurgeIcons from 'vite-plugin-purge-icons';
 
@@ -21,7 +20,6 @@ export default function (viteEnv, srcPath: string) {
     PurgeIcons({
       content: ['**/*.html', '**/*.js', '**/*.vue', '**/*.jsx', '**/*.tsx'],
       format: 'mjs'
-    }),
-    vitestConfig(srcPath)
+    })
   ];
 }

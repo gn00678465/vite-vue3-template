@@ -3,7 +3,6 @@
 import { defineConfig, loadEnv } from 'vite';
 import fs from 'fs';
 import {
-  vitestConfig,
   getRootPath,
   getSrcPath,
   plugins,
