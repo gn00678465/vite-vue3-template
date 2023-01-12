@@ -6,3 +6,4 @@ export * from './storage';
 export * from './crypto';
 export * from './object';
 export * from './colors';
+export * from './date';

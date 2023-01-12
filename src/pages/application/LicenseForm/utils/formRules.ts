@@ -61,6 +61,19 @@ export const rules = {
       return true;
     }
   },
+  WarrantyExpired: {
+    required: true,
+    trigger: 'blur',
+    validator(rule: FormItemRule, value: string) {
+      if (!value) {
+        return new Error('請選擇保固到期日期');
+      }
+      if (isBefore(parseISO(value), new Date())) {
+        return new Error('保固到期日期不可小於今天');
+      }
+      return true;
+    }
+  },
   ApplyModule: [
     {
       required: true,

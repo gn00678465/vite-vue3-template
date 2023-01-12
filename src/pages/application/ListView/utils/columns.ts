@@ -5,11 +5,11 @@ import {
   EnumLicenseFormState,
   EnumFunctionModule
 } from '@/enum';
-import { format, utcToZonedTime } from 'date-fns-tz';
 import { fetchesObj, FetchKeys } from './fetch';
 import { renderState } from './render';
 import { stateDefault } from './fetch';
 import { useI18n } from '@/hooks';
+import { toLocalString } from '@/utils';
 
 export type Types = keyof typeof EnumLicenseFormType;
 export type States = keyof typeof EnumLicenseFormState;
@@ -111,8 +111,7 @@ export function createColumns({
       title: t('column.CreateTime'),
       key: 'CreateTime',
       render: (rowData) => {
-        const zonedDate = utcToZonedTime(rowData.CreateTime, 'Asia/Taipei');
-        return format(zonedDate, 'yyyy-MM-dd HH:mm:ss');
+        return toLocalString(rowData.CreateTime);
       }
     },
     {

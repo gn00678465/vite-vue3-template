@@ -37,5 +37,11 @@ export default {
     NetworkScanner: '主機探查',
     'CPE-Fix': 'CPE-修補',
     FileStream: '智慧分流'
+  },
+  label: {
+    ExpiredDate: '授權到期時間',
+    WarrantyExpired: '保固到期時間',
+    POCExplanation: '說明',
+    POCReason: '原因'
   }
 };

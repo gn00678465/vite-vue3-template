@@ -11,7 +11,15 @@ import {
 import { pipe, pick, assoc, omit, prop } from 'ramda';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useMachine } from '@xstate/vue';
-import { NForm, NSelect, NButton, NGrid, NFormItemGi } from 'naive-ui';
+import {
+  NForm,
+  NSelect,
+  NButton,
+  NGrid,
+  NFormItemGi,
+  NInputNumber,
+  NDatePicker
+} from 'naive-ui';
 import FixedCard from '@/components/custom/FixedCard';
 import {
   SignOffComment,
@@ -20,14 +28,13 @@ import {
   UploadAttachment,
   SignOffState,
   HeaderWrap,
-  SerialNumber
+  SerialNumber,
+  POCReason,
+  POCExplanation
 } from './components';
 import type { FormInst, FormValidationError } from 'naive-ui';
 import { useAuthStore, useApiStore, useTabStore } from '@/stores';
 import {
-  renderExpiredDate,
-  renderTestDays,
-  renderPerSeat,
   rules,
   FormValue,
   includeImage,
@@ -35,9 +42,16 @@ import {
   initStateMachine,
   SIGN_OFF_STATES,
   omitPOC,
-  ApplyModule
+  ApplyModule,
+  endOfUTCString,
+  dateToUTCTime
 } from './utils';
-import { useNotification, useSwal, useLoading } from '@/hooks';
+import {
+  useNotification,
+  useSwal,
+  useLoading,
+  useImmerReactive
+} from '@/hooks';
 import { execStrategyActions } from '@/utils';
 import { fetchSpecificApplicationForm } from '@/service/api';
 import { useI18n } from 'vue-i18n';
@@ -77,15 +91,22 @@ export default defineComponent({
     const formRef: Ref<FormInst | null> = ref(null);
     const formState: Ref<string> = ref('');
 
-    const formValue = reactive<FormValue>({
+    const [formValue, updateFormValue] = useImmerReactive<FormValue>({
       SaleId: auth.isAdmin ? null : auth.userInfo.UserId,
       CustomerId: null,
       TestDays: 1,
       PerSeat: 1,
       ExpiredDate: null,
+      WarrantyExpired: null,
       ApplyModule: [],
       Images: ''
     });
+
+    function handleUpdateFormValue<T>(key: keyof FormValue, value: T) {
+      updateFormValue((draft) => {
+        (draft[key] as unknown) = value;
+      });
+    }
 
     const { formType, formId, formalId } = toRefs(props);
     const needUpload = computed(() => includeImage(formValue));
@@ -332,10 +353,12 @@ export default defineComponent({
         pick(Object.keys(formValue)),
         omit(['Images'])
       )(result.Items);
-      Object.assign(formValue, res);
-      if (result?.Images) {
-        formValue.Images = result.Images;
-      }
+      updateFormValue((draft) => {
+        Object.assign(draft, res);
+        if (result?.Images) {
+          draft.Images = result.Images;
+        }
+      });
       formState.value = result.Items.State;
     }
 
@@ -386,7 +409,7 @@ export default defineComponent({
                           tag
                           value={formValue.SaleId}
                           on-update:value={(value: number) => {
-                            formValue.SaleId = value;
+                            handleUpdateFormValue<number>('SaleId', value);
                           }}
                         ></NSelect>
                       ) : (
@@ -401,22 +424,79 @@ export default defineComponent({
                         value={formValue.CustomerId}
                         disabled={!isCreate.value || isModule.value}
                         on-update:value={(value: number) => {
-                          formValue.CustomerId = value;
+                          handleUpdateFormValue<number>('CustomerId', value);
                         }}
                       ></NSelect>
                     </NFormItemGi>
                     {isFormal.value && (
-                      <NFormItemGi label="授權到期時間" path="ExpiredDate">
-                        {renderExpiredDate(formValue)}
-                      </NFormItemGi>
+                      <>
+                        <NFormItemGi label="授權到期時間" path="ExpiredDate">
+                          <NDatePicker
+                            class="w-full"
+                            type="date"
+                            placeholder="請選擇授權到期時間"
+                            value={dateToUTCTime(formValue.ExpiredDate)}
+                            isDateDisabled={(ts: number) => {
+                              return ts < Date.now() - 87200000;
+                            }}
+                            on-update:value={(value: number) => {
+                              handleUpdateFormValue<string>(
+                                'ExpiredDate',
+                                endOfUTCString(value)
+                              );
+                            }}
+                          />
+                        </NFormItemGi>
+                        <NFormItemGi
+                          label="保固到期時間"
+                          path="WarrantyExpired"
+                        >
+                          <NDatePicker
+                            class="w-full"
+                            type="date"
+                            placeholder="請選擇保固到期時間"
+                            value={dateToUTCTime(formValue.WarrantyExpired)}
+                            isDateDisabled={(ts: number) => {
+                              return ts < Date.now() - 87200000;
+                            }}
+                            on-update:value={(value: number) => {
+                              handleUpdateFormValue<string>(
+                                'WarrantyExpired',
+                                endOfUTCString(value)
+                              );
+                            }}
+                          />
+                        </NFormItemGi>
+                      </>
                     )}
                     {(isPOC.value || isModule.value) && (
                       <>
                         <NFormItemGi label="測試天數" path="TestDays">
-                          {renderTestDays(formValue)}
+                          <NInputNumber
+                            class="w-full"
+                            min={1}
+                            max={90}
+                            buttonPlacement="both"
+                            defaultValue={formValue.TestDays}
+                            value={formValue.TestDays}
+                            on-update:value={(value: number) => {
+                              handleUpdateFormValue<number>('TestDays', value);
+                              // formValue.TestDays = value;
+                            }}
+                          />
                         </NFormItemGi>
                         <NFormItemGi label="測試用量" path="PerSeat">
-                          {renderPerSeat(formValue)}
+                          <NInputNumber
+                            class="w-full"
+                            min={1}
+                            buttonPlacement="both"
+                            defaultValue={formValue.PerSeat}
+                            value={formValue.PerSeat}
+                            on-update:value={(value: number) => {
+                              handleUpdateFormValue<number>('PerSeat', value);
+                              // formValue.PerSeat = value;
+                            }}
+                          />
                         </NFormItemGi>
                       </>
                     )}
@@ -428,24 +508,36 @@ export default defineComponent({
                     defaultExpiredDate={formValue.ExpiredDate}
                     disabledModule={functionalModule.value}
                     onUpdate:value={(value) => {
-                      formValue.ApplyModule = value;
+                      handleUpdateFormValue<ApplyModule[]>(
+                        'ApplyModule',
+                        value
+                      );
                     }}
                   ></ModuleList>
                 </HeaderWrap>
                 {/* upload */}
                 {needUpload.value && (
-                  <HeaderWrap
-                    title="上傳附件"
-                    describe="測試天數大於45天或測試用量大於30天，必須掃描並上傳申請單。"
-                  >
-                    <UploadAttachment
-                      value={formValue.Images}
-                      defaultValue={formValue.Images}
-                      onUpdate:value={(images: string) => {
-                        formValue.Images = images;
-                      }}
-                    ></UploadAttachment>
-                  </HeaderWrap>
+                  <>
+                    <HeaderWrap
+                      title="說明"
+                      describe="測試天數大於45天或測試用量大於30U，必須填寫下列欄位。"
+                    >
+                      <POCExplanation></POCExplanation>
+                      <POCReason />
+                    </HeaderWrap>
+                    <HeaderWrap
+                      title="上傳附件"
+                      describe="測試天數大於45天或測試用量大於30U，必須掃描並上傳申請單。"
+                    >
+                      <UploadAttachment
+                        value={formValue.Images}
+                        defaultValue={formValue.Images}
+                        onUpdate:value={(images: string) => {
+                          handleUpdateFormValue<string>('Images', images);
+                        }}
+                      ></UploadAttachment>
+                    </HeaderWrap>
+                  </>
                 )}
                 {isCreate.value && (
                   <div class="flex items-center justify-around">

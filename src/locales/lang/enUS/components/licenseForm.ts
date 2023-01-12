@@ -37,5 +37,11 @@ export default {
     NetworkScanner: 'NetworkScanner',
     'CPE-Fix': 'CPE-Fix',
     FileStream: 'FileStream'
+  },
+  label: {
+    ExpiredDate: 'License Expiration Date',
+    WarrantyExpired: 'Warranty Expiration Date',
+    POCExplanation: 'Explanation',
+    POCReason: 'Reason'
   }
 };

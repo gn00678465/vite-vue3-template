@@ -17,7 +17,7 @@ import {
   NGi,
   NDatePicker
 } from 'naive-ui';
-import { ApplyModule, dateToUtcString, dateToUTCTime } from '../../utils';
+import { ApplyModule, endOfUTCString, dateToUTCTime } from '../../utils';
 import { execStrategyActions } from '@/utils';
 import { watchOnce, MaybeRef } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
@@ -136,7 +136,7 @@ export default defineComponent({
       return arr.map((item) => {
         return {
           Module: item,
-          Date: dateToUtcString(map.get(item) as number)
+          Date: endOfUTCString(map.get(item) as number)
         };
       });
     }

@@ -8,6 +8,7 @@ export type FormValue = {
   CustomerId: number | null;
   ApplyModule: ApplyModule[];
   ExpiredDate: string | null;
+  WarrantyExpired: string | null;
   TestDays: number;
   PerSeat: number;
   Images?: string;
